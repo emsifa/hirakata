@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { hiraganaLetters, hiraganaSheets } from '$lib/letters';
+	import { hiraganaLetters, hiraganaSheets } from '$lib/hiragana';
 	import { cn } from '$lib/utils';
 	import { clone, shuffle } from 'radash';
 
@@ -19,7 +19,7 @@
 	let letters = hiraganaLetters();
 	let columns = hiraganaSheets();
 
-	let shuffled: typeof letters = $state(shuffle(letters));
+	let shuffled: typeof letters = $state(clone(letters));
 	let startedAt: Date | null = $state(null);
 	let synth: SpeechSynthesis | null = $state(null);
 
@@ -138,62 +138,70 @@
 </script>
 
 <div
-	class="lex min-h-screen w-full items-center justify-center bg-gray-100 p-4 text-gray-700 sm:p-8"
+	class="lex min-h-screen w-full items-center justify-center bg-gray-800 p-4 text-gray-700 sm:p-8"
 >
 	<div class="mx-auto w-full max-w-4xl">
 		<div class="mb-6">
-			<h1 class="text-4xl font-bold text-primary-500">Hiragana</h1>
-			<p class="text-lg text-gray-800 opacity-75">
+			<h1 class="text-4xl font-bold text-primary-500">Hiragana-chan</h1>
+			<p class="text-lg text-gray-400 opacity-75">
 				Teman latihan menghafal huruf hiragana secara runut, disaat kamu gabut.
 			</p>
 		</div>
 		<div class="md:grid md:grid-cols-5">
-			<div
-				class="col-span-3 mb-[280px] grid grid-cols-6 gap-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl shadow-gray-300/30 md:mb-0 md:rounded-r-none md:border-r-0"
-			>
-				{#each columns as column}
-					<div class="flex flex-col items-center justify-center border border-gray-100 p-2">
-						{#if column.type === 'blank'}
-							&nbsp;
-						{:else if column.type === 'header'}
-							<h2 class="text-lg font-bold text-primary-500">{column.value}</h2>
-						{:else if column.type === 'letter'}
-							<h2 class="text-lg font-bold text-primary-500">{column.value}</h2>
-						{:else if column.type === 'question'}
-							<button
-								class={cn('relative w-full rounded-lg p-2', {
-									'text-gray-800': answered.includes(column.romaji ?? ''),
-									'bg-primary-100 text-primary-600':
-										isAsking(column.romaji) && !isBlinking(column.romaji),
-									'bg-primary-300 text-primary-800':
-										isAsking(column.romaji) && isBlinking(column.romaji),
-									'bg-rose-100 text-rose-600': isBlinking(column.romaji, false),
-									'cursor-default text-gray-400':
-										question?.romaji !== column.romaji && !answered.includes(column.romaji ?? '')
-								})}
-								onclick={() => speak(column.letter ?? '')}
-							>
-								<span
-									class={cn(`inline-flex transition-all`, {
-										'scale-[1.5]': isAsking(column.romaji) || answered.includes(column.romaji ?? '')
+			<div class="col-span-3 mb-[280px] md:mb-0">
+				<div
+					class="grid grid-cols-6 gap-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-gray-300/30 md:rounded-r-none md:border-r-0"
+				>
+					{#each columns as column}
+						<div class="flex flex-col items-center justify-center border border-gray-100 p-2">
+							{#if column.type === 'blank'}
+								&nbsp;
+							{:else if column.type === 'header'}
+								<h2 class="text-lg font-bold text-primary-500">{column.value}</h2>
+							{:else if column.type === 'letter'}
+								<h2 class="text-lg font-bold text-primary-500">{column.value}</h2>
+							{:else if column.type === 'question'}
+								<button
+									class={cn('relative w-full rounded-lg p-2', {
+										'text-gray-800': answered.includes(column.romaji ?? ''),
+										'bg-primary-100 text-primary-600':
+											isAsking(column.romaji) && !isBlinking(column.romaji),
+										'bg-primary-300 text-primary-800':
+											isAsking(column.romaji) && isBlinking(column.romaji),
+										'bg-rose-100 text-rose-600': isBlinking(column.romaji, false),
+										'cursor-default text-gray-400':
+											question?.romaji !== column.romaji && !answered.includes(column.romaji ?? '')
 									})}
+									onclick={() => speak(column.letter ?? '')}
 								>
-									{answered.includes(column.romaji ?? '') ? column.letter : column.romaji}
-								</span>
-								{#if answered.includes(column.romaji ?? '')}
 									<span
-										class="absolute right-0 top-0 rounded-full rounded-bl-lg p-1 text-xs text-black/30"
+										class={cn(`inline-flex transition-all`, {
+											'scale-[1.5]':
+												isAsking(column.romaji) || answered.includes(column.romaji ?? '')
+										})}
 									>
-										{column.romaji}
+										{answered.includes(column.romaji ?? '') ? column.letter : column.romaji}
 									</span>
-								{/if}
-							</button>
-						{/if}
-					</div>
-				{/each}
+									{#if answered.includes(column.romaji ?? '')}
+										<span
+											class="absolute right-0 top-0 rounded-full rounded-bl-lg p-1 text-xs text-black/30"
+										>
+											{column.romaji}
+										</span>
+									{/if}
+								</button>
+							{/if}
+						</div>
+					{/each}
+				</div>
+				<div class="mt-3 block text-center md:hidden">
+					<p class="text-sm text-gray-400 opacity-75">
+						© 2024 <a href="https://github.com/emsifa">Muhammad Syifa</a>
+					</p>
+				</div>
 			</div>
 			<div
-				class="fixed bottom-0 left-0 col-span-2 w-full rounded-xl rounded-b-none border border-l-0 border-gray-700 bg-gray-700 p-4 md:relative md:flex md:flex-col md:rounded-l-none md:rounded-br-xl"
+				class="fixed bottom-0 left-0 z-20 col-span-2 w-full rounded-xl rounded-b-none border border-l-0 border-gray-700 bg-gray-700 p-4 md:relative md:flex md:flex-col md:rounded-l-none md:rounded-br-xl"
 			>
 				{#if !result}
 					<div>
@@ -281,6 +289,11 @@
 					</div>
 				{/if}
 			</div>
+		</div>
+		<div class="mt-3 hidden text-center md:block">
+			<p class="text-sm text-gray-400 opacity-75">
+				© 2024 <a href="https://github.com/emsifa">Muhammad Syifa</a>
+			</p>
 		</div>
 	</div>
 </div>
