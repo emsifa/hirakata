@@ -33,6 +33,7 @@
 	},
 	"dependencies": {
 		"clsx": "^2.1.1",
+		"js-confetti": "^0.12.0",
 		"radash": "^12.1.0",
 		"tailwind-merge": "^2.5.4"
 	}

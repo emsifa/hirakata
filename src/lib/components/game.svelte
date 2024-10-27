@@ -2,6 +2,8 @@
 	import { cn } from '$lib/utils';
 	import { clone, shuffle } from 'radash';
 	import Footer from './footer.svelte';
+	import JSConfetti from 'js-confetti';
+	import { onMount } from 'svelte';
 
 	let {
 		letters,
@@ -24,6 +26,9 @@
 		letters: string[];
 	};
 
+	let confettiCanvas: HTMLCanvasElement | null = null;
+	let confetti: JSConfetti | null = $state(null);
+
 	let shuffled: typeof letters = $state(clone(letters));
 	let startedAt: Date | null = $state(null);
 	let synth: SpeechSynthesis | null = $state(null);
@@ -43,6 +48,11 @@
 
 	let result: Result | null = $state(null);
 
+	onMount(() => {
+		confetti = new JSConfetti({ canvas: confettiCanvas! });
+		synth = window.speechSynthesis;
+	});
+
 	function start() {
 		shuffled = shuffle(letters);
 		startedAt = new Date();
@@ -53,7 +63,6 @@
 		}));
 		questionIndex = 0;
 		attempts = 0;
-		synth = window.speechSynthesis;
 
 		const q = questions[questionIndex];
 		speak(q.letter);
@@ -68,6 +77,8 @@
 		blink = null;
 		hearts = 5;
 		result = null;
+
+		confetti?.clearCanvas();
 	}
 
 	function next() {
@@ -132,6 +143,17 @@
 		const resultLetters = letters.filter((l) => answered.includes(l.romaji)).map((l) => l.letter);
 
 		result = { totalLetters, totalTime, letters: resultLetters };
+		highestCombo = Math.max(highestCombo, combo);
+
+		const allCorrects = resultLetters.length === letters.length;
+		if (allCorrects) {
+			confetti?.addConfetti({
+				emojis: ['🌸', '✨', '🌟', '🗼'],
+				emojiSize: 20,
+				confettiNumber: 90,
+				confettiRadius: 6
+			});
+		}
 	}
 
 	function doBlink(type: boolean, callback?: () => void) {
@@ -313,4 +335,8 @@
 			</div>
 		{/if}
 	</div>
+	<canvas
+		class="pointer-events-none fixed left-0 top-0 z-20 h-full w-full"
+		bind:this={confettiCanvas}
+	></canvas>
 </div>
