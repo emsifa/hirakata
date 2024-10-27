@@ -12,7 +12,7 @@
 	<title>Katakana-kun</title>
 	<meta
 		name="description"
-		content="Teman latihan menghafal huruf katakana secara runut, disaat kamu gabut. Gratis, tanpa iklan, tanpa batasan."
+		content="Teman latihan menghafal huruf katakana secara runut, di saat kamu gabut. Gratis, tanpa iklan, tanpa batasan."
 	/>
 	<link rel="icon" href="/katakana.svg" sizes="any" type="image/svg+xml" />
 </svelte:head>
@@ -23,7 +23,7 @@
 	<div class="mx-auto w-full max-w-4xl">
 		<PageTitle
 			title="Katakana-kun"
-			description="Teman latihan menghafal huruf katakana secara runut, disaat kamu gabut."
+			description="Teman latihan menghafal huruf katakana secara runut, di saat kamu gabut."
 		/>
 		<Game {letters} {columns} />
 		<div class="mt-3 hidden md:block">

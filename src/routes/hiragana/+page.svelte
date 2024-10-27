@@ -12,7 +12,7 @@
 	<title>Hiragana-chan</title>
 	<meta
 		name="description"
-		content="Teman latihan menghafal huruf hiragana secara runut, disaat kamu gabut. Gratis, tanpa iklan, tanpa batasan."
+		content="Teman latihan menghafal huruf hiragana secara runut, di saat kamu gabut. Gratis, tanpa iklan, tanpa batasan."
 	/>
 	<link rel="icon" href="/hiragana.svg" sizes="any" type="image/svg+xml" />
 </svelte:head>
@@ -23,7 +23,7 @@
 	<div class="mx-auto w-full max-w-4xl">
 		<PageTitle
 			title="Hiragana-chan"
-			description="Teman latihan menghafal huruf hiragana secara runut, disaat kamu gabut."
+			description="Teman latihan menghafal huruf hiragana secara runut, di saat kamu gabut."
 		/>
 		<Game {letters} {columns} />
 		<div class="mt-3 hidden md:block">
