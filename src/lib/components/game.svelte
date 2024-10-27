@@ -27,10 +27,19 @@
 	} = $props();
 
 	type Difficulty = 'easy' | 'medium' | 'hard';
+	let difficulty: Difficulty = $state('easy');
+
+	let difficultiOptions: {
+		label: string;
+		value: Difficulty;
+	}[] = [
+		{ label: 'Mudah', value: 'easy' },
+		{ label: 'Sedang', value: 'medium' },
+		{ label: 'Sulit', value: 'hard' }
+	];
 
 	let confettiCanvas: HTMLCanvasElement | null = null;
 	let confetti: JSConfetti | null = $state(null);
-	let difficulty: Difficulty = $state('easy');
 
 	let shuffled: typeof letters = $state(clone(letters));
 	let options: typeof letters = $state(clone(letters));
@@ -328,33 +337,17 @@
 						<div class="flex flex-col">
 							<h2 class="text-3xl font-bold text-primary-500">Pilih tingkat kesulitan</h2>
 							<div class="mt-4 grid grid-cols-3 gap-3">
-								<button
-									class={cn(
-										'w-full rounded-xl bg-gray-600 p-3 text-lg font-semibold text-gray-300 transition-all hover:bg-primary-500 hover:text-white',
-										{ 'bg-primary-500 text-white': difficulty === 'easy' }
-									)}
-									onclick={() => (difficulty = 'easy')}
-								>
-									Mudah
-								</button>
-								<button
-									class={cn(
-										'w-full rounded-xl bg-gray-600 p-3 text-lg font-semibold text-gray-300 transition-all hover:bg-primary-500 hover:text-white',
-										{ 'bg-primary-500 text-white': difficulty === 'medium' }
-									)}
-									onclick={() => (difficulty = 'medium')}
-								>
-									Sedang
-								</button>
-								<button
-									class={cn(
-										'w-full rounded-xl bg-gray-600 p-3 text-lg font-semibold text-gray-300 transition-all hover:bg-primary-500 hover:text-white',
-										{ 'bg-primary-500 text-white': difficulty === 'hard' }
-									)}
-									onclick={() => (difficulty = 'hard')}
-								>
-									Sulit
-								</button>
+								{#each difficultiOptions as opt}
+									<button
+										class={cn(
+											'w-full rounded-xl bg-gray-600 p-3 text-lg font-semibold text-gray-300 transition-all hover:bg-primary-500 hover:text-white',
+											{ 'bg-primary-500 text-white': difficulty === opt.value }
+										)}
+										onclick={() => (difficulty = opt.value)}
+									>
+										{opt.label}
+									</button>
+								{/each}
 							</div>
 						</div>
 						<div class="mt-4 w-full">
