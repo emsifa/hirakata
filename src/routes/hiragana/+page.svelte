@@ -12,7 +12,7 @@
 	<title>Hiragana-chan</title>
 	<meta
 		name="description"
-		content="Teman latihan menghafal huruf hiragana secara runut, disaat kamu gabut."
+		content="Teman latihan menghafal huruf hiragana secara runut, disaat kamu gabut. Gratis, tanpa iklan, tanpa batasan."
 	/>
 	<link rel="icon" href="/hiragana.svg" sizes="any" type="image/svg+xml" />
 </svelte:head>

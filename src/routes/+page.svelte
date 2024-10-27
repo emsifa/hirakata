@@ -4,7 +4,10 @@
 
 <svelte:head>
 	<title>{'{'}Hira|Kata{'}'}</title>
-	<meta name="description" content="Teman latihan menghafal huruf hiragana dan katakana." />
+	<meta
+		name="description"
+		content="Teman latihan menghafal huruf hiragana dan katakana. Gratis, tanpa iklan, tanpa batasan."
+	/>
 	<link rel="icon" href="/hiragana.svg" sizes="any" type="image/svg+xml" />
 </svelte:head>
 

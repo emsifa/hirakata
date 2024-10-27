@@ -12,7 +12,7 @@
 	<title>Katakana-kun</title>
 	<meta
 		name="description"
-		content="Teman latihan menghafal huruf katakana secara runut, disaat kamu gabut."
+		content="Teman latihan menghafal huruf katakana secara runut, disaat kamu gabut. Gratis, tanpa iklan, tanpa batasan."
 	/>
 	<link rel="icon" href="/katakana.svg" sizes="any" type="image/svg+xml" />
 </svelte:head>
