@@ -142,11 +142,9 @@
 	}
 </script>
 
-<div class="select-none md:grid md:grid-cols-5">
+<div class="select-none gap-4 rounded-xl bg-gray-700 p-3 md:grid md:grid-cols-5 md:p-4">
 	<div class="col-span-3 mb-[280px] md:mb-0">
-		<div
-			class="grid grid-cols-6 gap-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-gray-300/30 md:rounded-r-none md:border-r-0"
-		>
+		<div class="grid grid-cols-6 gap-0 overflow-hidden rounded-xl bg-white shadow-gray-300/30">
 			{#each columns as column}
 				<div class="flex flex-col items-center justify-center border border-gray-100 p-2">
 					{#if column.type === 'blank'}
@@ -193,7 +191,7 @@
 		</div>
 	</div>
 	<div
-		class="fixed bottom-0 left-0 z-20 col-span-2 w-full rounded-xl rounded-b-none border border-l-0 border-gray-700 bg-gray-700 p-4 md:relative md:flex md:flex-col md:rounded-l-none md:rounded-br-xl"
+		class="fixed bottom-0 left-0 z-20 col-span-2 w-full rounded-xl rounded-b-none border border-l-0 border-gray-700 bg-gray-700 p-4 md:relative md:flex md:flex-col md:rounded-l-none md:rounded-br-xl md:p-0"
 	>
 		{#if !result}
 			<div>
