@@ -78,6 +78,7 @@
 		blink = null;
 		hearts = 5;
 		result = null;
+		combo = 0;
 
 		confetti?.clearCanvas();
 	}
