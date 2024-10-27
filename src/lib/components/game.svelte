@@ -74,6 +74,8 @@
 
 			const q = questions[questionIndex];
 			speak(q.letter);
+		} else {
+			finish();
 		}
 	}
 
