@@ -84,8 +84,6 @@
 	function answer(romaji: string) {
 		if (!startedAt) return;
 
-		speakByRomaji(romaji);
-
 		const current = questions[questionIndex];
 		const correct = current.romaji === romaji;
 		current.attempts++;
@@ -101,13 +99,6 @@
 
 		if (hearts === 0) {
 			finish();
-		}
-	}
-
-	function speakByRomaji(romaji: string) {
-		const letter = letters.find((l) => l.romaji === romaji);
-		if (letter) {
-			speak(letter.letter);
 		}
 	}
 
