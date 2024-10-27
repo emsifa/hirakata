@@ -5,14 +5,6 @@
 	import JSConfetti from 'js-confetti';
 	import { onMount } from 'svelte';
 
-	let {
-		letters,
-		columns
-	}: {
-		letters: Letter[];
-		columns: Column[];
-	} = $props();
-
 	type Question = {
 		letter: string;
 		romaji: string;
@@ -26,10 +18,22 @@
 		letters: string[];
 	};
 
+	let {
+		letters,
+		columns
+	}: {
+		letters: Letter[];
+		columns: Column[];
+	} = $props();
+
+	type Difficulty = 'easy' | 'medium' | 'hard';
+
 	let confettiCanvas: HTMLCanvasElement | null = null;
 	let confetti: JSConfetti | null = $state(null);
+	let difficulty: Difficulty = $state('easy');
 
 	let shuffled: typeof letters = $state(clone(letters));
+	let options: typeof letters = $state(clone(letters));
 	let startedAt: Date | null = $state(null);
 	let synth: SpeechSynthesis | null = $state(null);
 
@@ -61,11 +65,8 @@
 			attempts: 0,
 			time: 0
 		}));
-		questionIndex = 0;
-		attempts = 0;
 
-		const q = questions[questionIndex];
-		speak(q.letter);
+		next();
 	}
 
 	function reset() {
@@ -89,9 +90,25 @@
 
 			const q = questions[questionIndex];
 			speak(q.letter);
+
+			options = generateOptions(q);
 		} else {
 			finish();
 		}
+	}
+
+	function generateOptions(question: Question): typeof letters {
+		if (difficulty === 'hard') {
+			return shuffle(shuffled.filter((l) => !answered.includes(l.romaji)));
+		} else if (difficulty === 'medium') {
+			const answer = { ...question };
+			return shuffle([answer, ...letters.filter((l) => l.romaji !== answer.romaji).slice(0, 9)]);
+		} else if (difficulty === 'easy') {
+			const answer = { ...question };
+			return shuffle([answer, ...letters.filter((l) => l.romaji !== answer.romaji).slice(0, 4)]);
+		}
+
+		return [];
 	}
 
 	function isAsking(romaji?: string) {
@@ -243,7 +260,7 @@
 		class="fixed bottom-0 left-0 z-20 col-span-2 w-full rounded-xl rounded-b-none border border-l-0 border-gray-700 bg-gray-700 p-4 md:relative md:flex md:flex-col md:rounded-l-none md:rounded-br-xl md:p-0"
 	>
 		{#if !result}
-			<div>
+			<div class="relative h-full py-4 md:py-0">
 				{#if startedAt}
 					<div class="mb-4 flex items-center justify-between">
 						<p class="text-lg text-gray-500">
@@ -269,32 +286,68 @@
 
 				<div class="max-h-[180px] flex-1 overflow-auto md:max-h-none">
 					<div class="grid grid-cols-5 gap-2">
-						{#each shuffled.filter((b) => !answered.includes(b.romaji)) as letter (letter.letter)}
+						{#each options as opt (opt.letter)}
 							<button
 								class={cn(
 									'w-full rounded-lg bg-gray-600 p-2 text-center text-lg font-normal transition-all hover:bg-white hover:text-gray-800 hover:shadow-lg hover:shadow-gray-300/30',
 									{
 										'text-white': startedAt,
-										'bg-primary-500 text-white': isBlinking(letter.romaji, true),
-										'bg-rose-500 text-white': isBlinking(letter.romaji, false)
+										'bg-primary-500 text-white': isBlinking(opt.romaji, true),
+										'bg-rose-500 text-white': isBlinking(opt.romaji, false)
 									}
 								)}
-								onclick={() => answer(letter.romaji)}
+								onclick={() => answer(opt.romaji)}
 							>
-								{letter.letter}
+								{opt.letter}
 							</button>
 						{/each}
 					</div>
 				</div>
 
 				{#if !startedAt}
-					<div class="mt-4">
-						<button
-							class="w-full rounded-xl bg-primary-500 px-4 py-3 text-lg font-semibold text-white"
-							onclick={start}
-						>
-							START
-						</button>
+					<div
+						class="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center bg-gray-700/80 md:px-8"
+					>
+						<div class="flex flex-col">
+							<h2 class="text-3xl font-bold text-primary-500">Pilih tingkat kesulitan</h2>
+							<div class="mt-4 grid grid-cols-3 gap-3">
+								<button
+									class={cn(
+										'w-full rounded-xl bg-gray-600 p-3 text-lg font-semibold text-gray-300 transition-all hover:bg-primary-500 hover:text-white',
+										{ 'bg-primary-500 text-white': difficulty === 'easy' }
+									)}
+									onclick={() => (difficulty = 'easy')}
+								>
+									Mudah
+								</button>
+								<button
+									class={cn(
+										'w-full rounded-xl bg-gray-600 p-3 text-lg font-semibold text-gray-300 transition-all hover:bg-primary-500 hover:text-white',
+										{ 'bg-primary-500 text-white': difficulty === 'medium' }
+									)}
+									onclick={() => (difficulty = 'medium')}
+								>
+									Sedang
+								</button>
+								<button
+									class={cn(
+										'w-full rounded-xl bg-gray-600 p-3 text-lg font-semibold text-gray-300 transition-all hover:bg-primary-500 hover:text-white',
+										{ 'bg-primary-500 text-white': difficulty === 'hard' }
+									)}
+									onclick={() => (difficulty = 'hard')}
+								>
+									Sulit
+								</button>
+							</div>
+						</div>
+						<div class="mt-4 w-full">
+							<button
+								class="w-full rounded-xl bg-primary-500 px-4 py-3 text-lg font-semibold text-white"
+								onclick={start}
+							>
+								START
+							</button>
+						</div>
 					</div>
 				{/if}
 			</div>
