@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>{'{'}Hira|Kana{'}'}gana</title>
+	<title>{'{'}Hira|Kata{'}'}gana</title>
 	<meta name="description" content="Teman latihan menghafal huruf hiragana dan katagana." />
 	<link rel="icon" href="/hiragana.svg" sizes="any" type="image/svg+xml" />
 </svelte:head>
@@ -14,7 +14,7 @@
 			<span>{'{'}</span>
 			<span class="text-white">Hira</span>
 			<span>|</span>
-			<span class="text-white">Kana</span>
+			<span class="text-white">Kata</span>
 			<span>{'}'}</span>
 			<span>gana</span>
 		</h1>
