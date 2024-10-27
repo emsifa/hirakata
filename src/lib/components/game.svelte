@@ -267,7 +267,7 @@
 		class="fixed bottom-0 left-0 z-20 col-span-2 w-full rounded-xl rounded-b-none border border-l-0 border-gray-700 bg-gray-700 p-4 md:relative md:flex md:flex-col md:rounded-l-none md:rounded-br-xl md:p-0"
 	>
 		{#if !result}
-			<div class="relative flex h-full flex-col py-4 md:py-0">
+			<div class="md:min-h-none relative flex h-full min-h-[200px] flex-col py-4 md:py-0">
 				{#if startedAt}
 					<div class="mb-4 flex items-center justify-between">
 						<p class="text-lg text-gray-500">
