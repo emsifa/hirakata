@@ -8,6 +8,14 @@
 	let columns = hiraganaSheets();
 </script>
 
+<svelte:head>
+	<title>Hiragana-chan</title>
+	<meta
+		name="description"
+		content="Teman latihan menghafal huruf hiragana secara runut, disaat kamu gabut."
+	/>
+</svelte:head>
+
 <div
 	class="lex min-h-screen w-full items-center justify-center bg-gray-800 p-4 text-gray-700 sm:p-8"
 >
