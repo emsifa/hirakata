@@ -194,7 +194,7 @@
 >
 	<div class="col-span-3 mb-[280px] md:mb-0">
 		<div class="grid grid-cols-6 gap-0 overflow-hidden rounded-xl bg-white shadow-gray-300/30">
-			{#each columns as column}
+			{#each columns as column, i (`column-${column.type}-${i}}`)}
 				<div class="flex flex-col items-center justify-center border border-gray-100 p-2">
 					{#if column.type === 'blank'}
 						&nbsp;
@@ -269,7 +269,7 @@
 
 				<div class="max-h-[180px] flex-1 overflow-auto md:max-h-none">
 					<div class="grid grid-cols-5 gap-2">
-						{#each shuffled.filter((b) => !answered.includes(b.romaji)) as letter}
+						{#each shuffled.filter((b) => !answered.includes(b.romaji)) as letter (letter.letter)}
 							<button
 								class={cn(
 									'w-full rounded-lg bg-gray-600 p-2 text-center text-lg font-normal transition-all hover:bg-white hover:text-gray-800 hover:shadow-lg hover:shadow-gray-300/30',
