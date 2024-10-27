@@ -91,9 +91,11 @@
 
 		if (correct) {
 			current.time = new Date().getTime() - questionStartedAt;
+			playSoundCorrect();
 			return doBlink(true, () => next());
 		}
 
+		playSoundWrong();
 		doBlink(false);
 		hearts--;
 
@@ -130,6 +132,16 @@
 
 		synth?.cancel();
 		synth?.speak(utterance);
+	}
+
+	function playSoundWrong() {
+		const audio = new Audio('/sounds/wrong.mp3');
+		audio.play();
+	}
+
+	function playSoundCorrect() {
+		const audio = new Audio('/sounds/correct.mp3');
+		audio.play();
 	}
 </script>
 
