@@ -1,0 +1,24 @@
+<script lang="ts">
+	import Footer from '$lib/components/footer.svelte';
+	import Game from '$lib/components/game.svelte';
+	import PageTitle from '$lib/components/page-title.svelte';
+	import { katakanaLetters, katakanaSheets } from '$lib/katakana';
+
+	let letters = katakanaLetters();
+	let columns = katakanaSheets();
+</script>
+
+<div
+	class="lex min-h-screen w-full items-center justify-center bg-gray-800 p-4 text-gray-700 sm:p-8"
+>
+	<div class="mx-auto w-full max-w-4xl">
+		<PageTitle
+			title="Katakana-kun"
+			description="Teman latihan menghafal huruf katakana secara runut, disaat kamu gabut."
+		/>
+		<Game {letters} {columns} />
+		<div class="mt-3 hidden md:block">
+			<Footer />
+		</div>
+	</div>
+</div>

@@ -1,0 +1,143 @@
+export const katakanaLetters = (): Letter[] => [
+	{ letter: 'ア', romaji: 'a' },
+	{ letter: 'イ', romaji: 'i' },
+	{ letter: 'ウ', romaji: 'u' },
+	{ letter: 'エ', romaji: 'e' },
+	{ letter: 'オ', romaji: 'o' },
+
+	{ letter: 'カ', romaji: 'ka' },
+	{ letter: 'キ', romaji: 'ki' },
+	{ letter: 'ク', romaji: 'ku' },
+	{ letter: 'ケ', romaji: 'ke' },
+	{ letter: 'コ', romaji: 'ko' },
+
+	{ letter: 'サ', romaji: 'sa' },
+	{ letter: 'シ', romaji: 'shi' },
+	{ letter: 'ス', romaji: 'su' },
+	{ letter: 'セ', romaji: 'se' },
+	{ letter: 'ソ', romaji: 'so' },
+
+	{ letter: 'タ', romaji: 'ta' },
+	{ letter: 'チ', romaji: 'chi' },
+	{ letter: 'ツ', romaji: 'tsu' },
+	{ letter: 'テ', romaji: 'te' },
+	{ letter: 'ト', romaji: 'to' },
+
+	{ letter: 'ナ', romaji: 'na' },
+	{ letter: 'ニ', romaji: 'ni' },
+	{ letter: 'ヌ', romaji: 'nu' },
+	{ letter: 'ネ', romaji: 'ne' },
+	{ letter: 'ノ', romaji: 'no' },
+
+	{ letter: 'ハ', romaji: 'ha' },
+	{ letter: 'ヒ', romaji: 'hi' },
+	{ letter: 'フ', romaji: 'fu' },
+	{ letter: 'ヘ', romaji: 'he' },
+	{ letter: 'ホ', romaji: 'ho' },
+
+	{ letter: 'マ', romaji: 'ma' },
+	{ letter: 'ミ', romaji: 'mi' },
+	{ letter: 'ム', romaji: 'mu' },
+	{ letter: 'メ', romaji: 'me' },
+	{ letter: 'モ', romaji: 'mo' },
+
+	{ letter: 'ヤ', romaji: 'ya' },
+	{ letter: 'ユ', romaji: 'yu' },
+	{ letter: 'ヨ', romaji: 'yo' },
+
+	{ letter: 'ラ', romaji: 'ra' },
+	{ letter: 'リ', romaji: 'ri' },
+	{ letter: 'ル', romaji: 'ru' },
+	{ letter: 'レ', romaji: 're' },
+	{ letter: 'ロ', romaji: 'ro' },
+
+	{ letter: 'ワ', romaji: 'wa' },
+	{ letter: 'ヲ', romaji: 'wo' },
+	{ letter: 'ン', romaji: 'n' }
+];
+
+export const katakanaSheets = (): Column[] => [
+	{ type: 'blank' },
+	{ type: 'header', value: 'A' },
+	{ type: 'header', value: 'I' },
+	{ type: 'header', value: 'U' },
+	{ type: 'header', value: 'E' },
+	{ type: 'header', value: 'O' },
+
+	{ type: 'blank' },
+	{ type: 'question', romaji: 'a', letter: 'ア' },
+	{ type: 'question', romaji: 'i', letter: 'イ' },
+	{ type: 'question', romaji: 'u', letter: 'ウ' },
+	{ type: 'question', romaji: 'e', letter: 'エ' },
+	{ type: 'question', romaji: 'o', letter: 'オ' },
+
+	{ type: 'letter', value: 'KA' },
+	{ type: 'question', romaji: 'ka', letter: 'カ' },
+	{ type: 'question', romaji: 'ki', letter: 'キ' },
+	{ type: 'question', romaji: 'ku', letter: 'ク' },
+	{ type: 'question', romaji: 'ke', letter: 'ケ' },
+	{ type: 'question', romaji: 'ko', letter: 'コ' },
+
+	{ type: 'letter', value: 'SA' },
+	{ type: 'question', romaji: 'sa', letter: 'サ' },
+	{ type: 'question', romaji: 'shi', letter: 'シ' },
+	{ type: 'question', romaji: 'su', letter: 'ス' },
+	{ type: 'question', romaji: 'se', letter: 'セ' },
+	{ type: 'question', romaji: 'so', letter: 'ソ' },
+
+	{ type: 'letter', value: 'TA' },
+	{ type: 'question', romaji: 'ta', letter: 'タ' },
+	{ type: 'question', romaji: 'chi', letter: 'チ' },
+	{ type: 'question', romaji: 'tsu', letter: 'ツ' },
+	{ type: 'question', romaji: 'te', letter: 'テ' },
+	{ type: 'question', romaji: 'to', letter: 'ト' },
+
+	{ type: 'letter', value: 'NA' },
+	{ type: 'question', romaji: 'na', letter: 'ナ' },
+	{ type: 'question', romaji: 'ni', letter: 'ニ' },
+	{ type: 'question', romaji: 'nu', letter: 'ヌ' },
+	{ type: 'question', romaji: 'ne', letter: 'ネ' },
+	{ type: 'question', romaji: 'no', letter: 'ノ' },
+
+	{ type: 'letter', value: 'HA' },
+	{ type: 'question', romaji: 'ha', letter: 'ハ' },
+	{ type: 'question', romaji: 'hi', letter: 'ヒ' },
+	{ type: 'question', romaji: 'fu', letter: 'フ' },
+	{ type: 'question', romaji: 'he', letter: 'ヘ' },
+	{ type: 'question', romaji: 'ho', letter: 'ホ' },
+
+	{ type: 'letter', value: 'MA' },
+	{ type: 'question', romaji: 'ma', letter: 'マ' },
+	{ type: 'question', romaji: 'mi', letter: 'ミ' },
+	{ type: 'question', romaji: 'mu', letter: 'ム' },
+	{ type: 'question', romaji: 'me', letter: 'メ' },
+	{ type: 'question', romaji: 'mo', letter: 'モ' },
+
+	{ type: 'letter', value: 'YA' },
+	{ type: 'question', romaji: 'ya', letter: 'ヤ' },
+	{ type: 'blank' },
+	{ type: 'question', romaji: 'yu', letter: 'ユ' },
+	{ type: 'blank' },
+	{ type: 'question', romaji: 'yo', letter: 'ヨ' },
+
+	{ type: 'letter', value: 'RA' },
+	{ type: 'question', romaji: 'ra', letter: 'ラ' },
+	{ type: 'question', romaji: 'ri', letter: 'リ' },
+	{ type: 'question', romaji: 'ru', letter: 'ル' },
+	{ type: 'question', romaji: 're', letter: 'レ' },
+	{ type: 'question', romaji: 'ro', letter: 'ロ' },
+
+	{ type: 'letter', value: 'WA' },
+	{ type: 'question', romaji: 'wa', letter: 'ワ' },
+	{ type: 'blank' },
+	{ type: 'blank' },
+	{ type: 'blank' },
+	{ type: 'question', romaji: 'wo', letter: 'ヲ' },
+
+	{ type: 'letter', value: 'N' },
+	{ type: 'question', romaji: 'n', letter: 'ン' },
+	{ type: 'blank' },
+	{ type: 'blank' },
+	{ type: 'blank' },
+	{ type: 'blank' }
+];

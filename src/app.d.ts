@@ -8,6 +8,17 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+	type Letter = {
+		letter: string;
+		romaji: string;
+	};
+
+	type Column =
+		| { type: 'blank' }
+		| { type: 'header'; value: string }
+		| { type: 'letter'; value: string }
+		| { type: 'question'; romaji: string; letter: string };
 }
 
 export {};
