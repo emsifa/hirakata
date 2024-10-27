@@ -288,7 +288,7 @@
 								({((result.totalLetters / letters.length) * 100).toFixed(0)}%)
 							</span>
 						</div>
-						<div class="flex justify-between p-3 text-lg text-gray-300">
+						<div class="flex justify-between border-b border-gray-700 p-3 text-lg text-gray-300">
 							<span>Waktu </span>
 							<span>
 								{result.totalTime.toFixed(2) ?? 2}s
