@@ -133,7 +133,9 @@
 	}
 </script>
 
-<div class="select-none gap-4 rounded-xl bg-gray-700 p-3 md:grid md:grid-cols-5 md:p-4">
+<div
+	class="select-none gap-4 rounded-xl bg-gray-700 p-3 shadow-xl shadow-gray-900/30 md:grid md:grid-cols-5 md:p-4"
+>
 	<div class="col-span-3 mb-[280px] md:mb-0">
 		<div class="grid grid-cols-6 gap-0 overflow-hidden rounded-xl bg-white shadow-gray-300/30">
 			{#each columns as column}
