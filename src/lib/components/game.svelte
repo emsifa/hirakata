@@ -267,7 +267,7 @@
 		class="fixed bottom-0 left-0 z-20 col-span-2 w-full rounded-xl rounded-b-none border border-l-0 border-gray-700 bg-gray-700 p-4 md:relative md:flex md:flex-col md:rounded-l-none md:rounded-br-xl md:p-0"
 	>
 		{#if !result}
-			<div class="relative h-full py-4 md:py-0">
+			<div class="relative flex h-full flex-col py-4 md:py-0">
 				{#if startedAt}
 					<div class="mb-4 flex items-center justify-between">
 						<p class="text-lg text-gray-500">
@@ -311,6 +311,16 @@
 					</div>
 				</div>
 
+				{#if startedAt}
+					<div class="mt-4 w-full">
+						<button
+							class="w-full rounded-xl bg-primary-500 px-4 py-3 text-lg font-semibold text-white"
+							onclick={() => confirm('Apakah kamu yakin ingin mengakhiri permainan?') && reset()}
+						>
+							RESET
+						</button>
+					</div>
+				{/if}
 				{#if !startedAt}
 					<div
 						class="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center bg-gray-700/80 md:px-8"
