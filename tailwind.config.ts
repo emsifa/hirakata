@@ -7,7 +7,11 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				primary: colors.teal
+				primary: colors.teal,
+				secondary: colors.cyan
+			},
+			fontFamily: {
+				jp: ['Noto Sans JP', 'sans-serif']
 			}
 		}
 	},

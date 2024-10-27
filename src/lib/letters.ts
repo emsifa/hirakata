@@ -1,4 +1,4 @@
-export const hiragana = () => [
+export const hiraganaLetters = () => [
 	{ letter: 'あ', romaji: 'a' },
 	{ letter: 'い', romaji: 'i' },
 	{ letter: 'う', romaji: 'u' },
@@ -54,4 +54,90 @@ export const hiragana = () => [
 	{ letter: 'わ', romaji: 'wa' },
 	{ letter: 'を', romaji: 'wo' },
 	{ letter: 'ん', romaji: 'n' }
+];
+
+export const hiraganaSheets = () => [
+	{ type: 'blank' },
+	{ type: 'header', value: 'A' },
+	{ type: 'header', value: 'I' },
+	{ type: 'header', value: 'U' },
+	{ type: 'header', value: 'E' },
+	{ type: 'header', value: 'O' },
+
+	{ type: 'blank' },
+	{ type: 'question', romaji: 'a', letter: 'あ' },
+	{ type: 'question', romaji: 'i', letter: 'い' },
+	{ type: 'question', romaji: 'u', letter: 'う' },
+	{ type: 'question', romaji: 'e', letter: 'え' },
+	{ type: 'question', romaji: 'o', letter: 'お' },
+
+	{ type: 'letter', value: 'KA' },
+	{ type: 'question', romaji: 'ka', letter: 'か' },
+	{ type: 'question', romaji: 'ki', letter: 'き' },
+	{ type: 'question', romaji: 'ku', letter: 'く' },
+	{ type: 'question', romaji: 'ke', letter: 'け' },
+	{ type: 'question', romaji: 'ko', letter: 'こ' },
+
+	{ type: 'letter', value: 'SA' },
+	{ type: 'question', romaji: 'sa', letter: 'さ' },
+	{ type: 'question', romaji: 'shi', letter: 'し' },
+	{ type: 'question', romaji: 'su', letter: 'す' },
+	{ type: 'question', romaji: 'se', letter: 'せ' },
+	{ type: 'question', romaji: 'so', letter: 'そ' },
+
+	{ type: 'letter', value: 'TA' },
+	{ type: 'question', romaji: 'ta', letter: 'た' },
+	{ type: 'question', romaji: 'chi', letter: 'ち' },
+	{ type: 'question', romaji: 'tsu', letter: 'つ' },
+	{ type: 'question', romaji: 'te', letter: 'て' },
+	{ type: 'question', romaji: 'to', letter: 'と' },
+
+	{ type: 'letter', value: 'NA' },
+	{ type: 'question', romaji: 'na', letter: 'な' },
+	{ type: 'question', romaji: 'ni', letter: 'に' },
+	{ type: 'question', romaji: 'nu', letter: 'ぬ' },
+	{ type: 'question', romaji: 'ne', letter: 'ね' },
+	{ type: 'question', romaji: 'no', letter: 'の' },
+
+	{ type: 'letter', value: 'HA' },
+	{ type: 'question', romaji: 'ha', letter: 'は' },
+	{ type: 'question', romaji: 'hi', letter: 'ひ' },
+	{ type: 'question', romaji: 'fu', letter: 'ふ' },
+	{ type: 'question', romaji: 'he', letter: 'へ' },
+	{ type: 'question', romaji: 'ho', letter: 'ほ' },
+
+	{ type: 'letter', value: 'MA' },
+	{ type: 'question', romaji: 'ma', letter: 'ま' },
+	{ type: 'question', romaji: 'mi', letter: 'み' },
+	{ type: 'question', romaji: 'mu', letter: 'む' },
+	{ type: 'question', romaji: 'me', letter: 'め' },
+	{ type: 'question', romaji: 'mo', letter: 'も' },
+
+	{ type: 'letter', value: 'YA' },
+	{ type: 'question', romaji: 'ya', letter: 'や' },
+	{ type: 'blank' },
+	{ type: 'question', romaji: 'yu', letter: 'ゆ' },
+	{ type: 'blank' },
+	{ type: 'question', romaji: 'yo', letter: 'よ' },
+
+	{ type: 'letter', value: 'RA' },
+	{ type: 'question', romaji: 'ra', letter: 'ら' },
+	{ type: 'question', romaji: 'ri', letter: 'り' },
+	{ type: 'question', romaji: 'ru', letter: 'る' },
+	{ type: 'question', romaji: 're', letter: 'れ' },
+	{ type: 'question', romaji: 'ro', letter: 'ろ' },
+
+	{ type: 'letter', value: 'WA' },
+	{ type: 'question', romaji: 'wa', letter: 'わ' },
+	{ type: 'blank' },
+	{ type: 'blank' },
+	{ type: 'blank' },
+	{ type: 'question', romaji: 'wo', letter: 'を' },
+
+	{ type: 'letter', value: 'N' },
+	{ type: 'question', romaji: 'n', letter: 'ん' },
+	{ type: 'blank' },
+	{ type: 'blank' },
+	{ type: 'blank' },
+	{ type: 'blank' }
 ];
