@@ -37,6 +37,10 @@
 	let blink: boolean | null = $state(null);
 	let hearts = $state(5);
 	let answered = $derived(questions.filter((q) => q.time > 0).map((q) => q.romaji));
+
+	let highestCombo = $state(0);
+	let combo = $state(0);
+
 	let result: Result | null = $state(null);
 
 	function start() {
@@ -91,19 +95,35 @@
 		current.attempts++;
 		attempts++;
 
-		if (correct) {
-			current.time = new Date().getTime() - questionStartedAt;
-			playSoundCorrect();
-			return doBlink(true, () => next());
+		return correct ? handleCorrect(current) : handleWrong();
+	}
+
+	function handleCorrect(current: Question) {
+		playSoundCorrect();
+
+		current.time = new Date().getTime() - questionStartedAt;
+
+		combo += 1;
+		if (combo % 5 === 0 && hearts < 5) {
+			hearts += 1;
+		}
+
+		return doBlink(true, () => next());
+	}
+
+	function handleWrong() {
+		if (combo > highestCombo) {
+			highestCombo = combo;
+		}
+		combo = 0;
+
+		hearts -= 1;
+		if (hearts === 0) {
+			finish();
 		}
 
 		playSoundWrong();
 		doBlink(false);
-		hearts--;
-
-		if (hearts === 0) {
-			finish();
-		}
 	}
 
 	function finish() {
@@ -207,6 +227,9 @@
 						<p class="text-lg text-gray-500">
 							{questionIndex + 1} / {letters.length}
 						</p>
+						<div class="text-gray-500">
+							{combo}x
+						</div>
 						<div class="inline-flex gap-1">
 							{#each { length: hearts } as _}
 								<svg
@@ -269,6 +292,12 @@
 							<span>Waktu </span>
 							<span>
 								{result.totalTime.toFixed(2) ?? 2}s
+							</span>
+						</div>
+						<div class="flex justify-between p-3 text-lg text-gray-300">
+							<span>Combo terbanyak </span>
+							<span>
+								{highestCombo}x
 							</span>
 						</div>
 					</div>
