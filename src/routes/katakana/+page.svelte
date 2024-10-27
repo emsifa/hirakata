@@ -14,6 +14,7 @@
 		name="description"
 		content="Teman latihan menghafal huruf katakana secara runut, disaat kamu gabut."
 	/>
+	<link rel="icon" href="/katakana.svg" sizes="any" type="image/svg+xml" />
 </svelte:head>
 
 <div

@@ -14,6 +14,7 @@
 		name="description"
 		content="Teman latihan menghafal huruf hiragana secara runut, disaat kamu gabut."
 	/>
+	<link rel="icon" href="/hiragana.svg" sizes="any" type="image/svg+xml" />
 </svelte:head>
 
 <div
