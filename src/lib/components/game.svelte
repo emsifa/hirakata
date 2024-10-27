@@ -103,10 +103,16 @@
 			return shuffle(shuffled.filter((l) => !answered.includes(l.romaji)));
 		} else if (difficulty === 'medium') {
 			const answer = { ...question };
-			return shuffle([answer, ...letters.filter((l) => l.romaji !== answer.romaji).slice(0, 9)]);
+			return shuffle([
+				answer,
+				...shuffle(letters.filter((l) => l.romaji !== answer.romaji)).slice(0, 9)
+			]);
 		} else if (difficulty === 'easy') {
 			const answer = { ...question };
-			return shuffle([answer, ...letters.filter((l) => l.romaji !== answer.romaji).slice(0, 4)]);
+			return shuffle([
+				answer,
+				...shuffle(letters.filter((l) => l.romaji !== answer.romaji)).slice(0, 4)
+			]);
 		}
 
 		return [];
