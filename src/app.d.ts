@@ -22,6 +22,8 @@ declare global {
 
 	type Difficulty = 'easy' | 'medium' | 'hard';
 
+	type GameplayMode = 'sequence' | 'random';
+
 	type Question = {
 		letter: string;
 		romaji: string;

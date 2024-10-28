@@ -14,7 +14,27 @@
 		canRandomize = hasFeature(Feature.RANDOM_HIRAGANA);
 	});
 
-	function onFinished(result: Result) {
+	function onStarted(difficulty: Difficulty, mode: GameplayMode) {
+		if (window.gtag) {
+			window.gtag('event', 'game_started', {
+				game: 'hiragana',
+				difficulty,
+				mode
+			});
+		}
+	}
+
+	function onReset(inGame: boolean, difficulty: Difficulty, mode: GameplayMode) {
+		if (inGame && window.gtag) {
+			window.gtag('event', 'game_reset', {
+				game: 'hiragana',
+				difficulty,
+				mode
+			});
+		}
+	}
+
+	function onFinished(result: Result, difficulty: Difficulty, mode: GameplayMode) {
 		if (
 			['hard', 'medium'].includes(result.difficulty) &&
 			result.highestStreak > 30 &&
@@ -23,6 +43,15 @@
 			addFeature(Feature.RANDOM_HIRAGANA);
 			canRandomize = true;
 			alert('Kamu telah membuka fitur baru! Sekarang kamu bisa mengacak huruf hiragana.');
+		}
+
+		if (window.gtag) {
+			window.gtag('event', 'game_finished', {
+				game: 'hiragana',
+				difficulty,
+				mode,
+				result
+			});
 		}
 	}
 </script>
@@ -44,7 +73,7 @@
 			title="Hiragana-chan"
 			description="Teman latihan menghafal huruf hiragana secara runut, di saat kamu gabut."
 		/>
-		<Game {letters} {columns} {canRandomize} {onFinished} />
+		<Game {letters} {columns} {canRandomize} {onStarted} {onReset} {onFinished} />
 		<div class="mt-3 hidden md:block">
 			<Footer />
 		</div>

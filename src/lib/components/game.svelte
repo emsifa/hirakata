@@ -9,16 +9,20 @@
 		letters,
 		columns,
 		canRandomize,
-		onFinished
+		onFinished,
+		onStarted,
+		onReset
 	}: {
 		letters: Letter[];
 		columns: Column[];
 		canRandomize: boolean;
-		onFinished?: (result: Result) => void;
+		onStarted?: (difficulty: Difficulty, mode: GameplayMode) => void;
+		onReset?: (inGame: boolean, difficulty: Difficulty, mode: GameplayMode) => void;
+		onFinished?: (result: Result, difficulty: Difficulty, mode: GameplayMode) => void;
 	} = $props();
 
 	let difficulty: Difficulty = $state('easy');
-	let mode: 'sequence' | 'random' = $state('sequence');
+	let mode: GameplayMode = $state('sequence');
 
 	let difficultyOptions: {
 		label: string;
@@ -78,10 +82,12 @@
 			questions = shuffle(questions);
 		}
 
+		onStarted?.(difficulty, mode);
+
 		next();
 	}
 
-	function reset() {
+	function reset(inGame = false) {
 		startedAt = null;
 		questions = [];
 		questionIndex = -1;
@@ -93,6 +99,8 @@
 		combo = 0;
 
 		confetti?.clearCanvas();
+
+		onReset?.(inGame, difficulty, mode);
 	}
 
 	function next() {
@@ -197,7 +205,7 @@
 			});
 		}
 
-		onFinished?.(result);
+		onFinished?.(result, difficulty, mode);
 	}
 
 	function doBlink(type: boolean, callback?: () => void) {
@@ -340,7 +348,8 @@
 					<div class="mt-4 w-full">
 						<button
 							class="w-full rounded-xl bg-primary-500 px-4 py-3 text-lg font-semibold text-white"
-							onclick={() => confirm('Apakah kamu yakin ingin mengakhiri permainan?') && reset()}
+							onclick={() =>
+								confirm('Apakah kamu yakin ingin mengakhiri permainan?') && reset(true)}
 						>
 							RESET
 						</button>
@@ -419,7 +428,7 @@
 				<div class="mt-4">
 					<button
 						class="w-full rounded-xl bg-primary-500 px-4 py-3 text-lg font-semibold text-white"
-						onclick={reset}
+						onclick={() => reset()}
 					>
 						RESTART
 					</button>
