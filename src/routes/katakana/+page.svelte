@@ -2,10 +2,29 @@
 	import Footer from '$lib/components/footer.svelte';
 	import Game from '$lib/components/game.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
+	import { addFeature, Feature, hasFeature } from '$lib/features';
 	import { katakanaLetters, katakanaSheets } from '$lib/katakana';
+	import { onMount } from 'svelte';
 
 	let letters = katakanaLetters();
 	let columns = katakanaSheets();
+	let canRandomize = $state(true);
+
+	onMount(() => {
+		canRandomize = hasFeature(Feature.RANDOM_KATAKANA);
+	});
+
+	function onFinished(result: Result) {
+		if (
+			(result.difficulty === 'medium' || result.difficulty === 'hard') &&
+			result.highestCombo > 30 &&
+			!hasFeature(Feature.RANDOM_KATAKANA)
+		) {
+			addFeature(Feature.RANDOM_KATAKANA);
+			canRandomize = true;
+			alert('Kamu telah membuka fitur baru! Sekarang kamu bisa mengacak huruf katakana.');
+		}
+	}
 </script>
 
 <svelte:head>
@@ -25,7 +44,7 @@
 			title="Katakana-kun"
 			description="Teman latihan menghafal huruf katakana secara runut, di saat kamu gabut."
 		/>
-		<Game {letters} {columns} />
+		<Game {letters} {columns} {canRandomize} {onFinished} />
 		<div class="mt-3 hidden md:block">
 			<Footer />
 		</div>

@@ -2,10 +2,29 @@
 	import Footer from '$lib/components/footer.svelte';
 	import Game from '$lib/components/game.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
+	import { addFeature, Feature, hasFeature } from '$lib/features';
 	import { hiraganaLetters, hiraganaSheets } from '$lib/hiragana';
+	import { onMount } from 'svelte';
 
 	let letters = hiraganaLetters();
 	let columns = hiraganaSheets();
+	let canRandomize = $state(true);
+
+	onMount(() => {
+		canRandomize = hasFeature(Feature.RANDOM_HIRAGANA);
+	});
+
+	function onFinished(result: Result) {
+		if (
+			(result.difficulty === 'medium' || result.difficulty === 'hard') &&
+			result.highestCombo > 30 &&
+			!hasFeature(Feature.RANDOM_HIRAGANA)
+		) {
+			addFeature(Feature.RANDOM_HIRAGANA);
+			canRandomize = true;
+			alert('Kamu telah membuka fitur baru! Sekarang kamu bisa mengacak huruf hiragana.');
+		}
+	}
 </script>
 
 <svelte:head>
@@ -25,7 +44,7 @@
 			title="Hiragana-chan"
 			description="Teman latihan menghafal huruf hiragana secara runut, di saat kamu gabut."
 		/>
-		<Game {letters} {columns} />
+		<Game {letters} {columns} {canRandomize} {onFinished} />
 		<div class="mt-3 hidden md:block">
 			<Footer />
 		</div>

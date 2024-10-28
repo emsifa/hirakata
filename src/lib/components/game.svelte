@@ -1,33 +1,24 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
-	import { clone, shuffle } from 'radash';
-	import Footer from './footer.svelte';
 	import JSConfetti from 'js-confetti';
+	import { clone, shuffle } from 'radash';
 	import { onMount } from 'svelte';
-
-	type Question = {
-		letter: string;
-		romaji: string;
-		attempts: number;
-		time: number;
-	};
-
-	type Result = {
-		totalLetters: number;
-		totalTime: number;
-		letters: string[];
-	};
+	import Footer from './footer.svelte';
 
 	let {
 		letters,
-		columns
+		columns,
+		canRandomize,
+		onFinished
 	}: {
 		letters: Letter[];
 		columns: Column[];
+		canRandomize: boolean;
+		onFinished?: (result: Result) => void;
 	} = $props();
 
-	type Difficulty = 'easy' | 'medium' | 'hard';
 	let difficulty: Difficulty = $state('easy');
+	let mode: 'sequence' | 'random' = $state('sequence');
 
 	let difficultiOptions: {
 		label: string;
@@ -36,6 +27,14 @@
 		{ label: 'Mudah', value: 'easy' },
 		{ label: 'Sedang', value: 'medium' },
 		{ label: 'Sulit', value: 'hard' }
+	];
+
+	let modeOptions: {
+		label: string;
+		value: 'sequence' | 'random';
+	}[] = [
+		{ label: 'Runut', value: 'sequence' },
+		{ label: 'Acak', value: 'random' }
 	];
 
 	let confettiCanvas: HTMLCanvasElement | null = null;
@@ -74,6 +73,10 @@
 			attempts: 0,
 			time: 0
 		}));
+
+		if (mode === 'random') {
+			questions = shuffle(questions);
+		}
 
 		next();
 	}
@@ -174,9 +177,15 @@
 		const totalLetters = answered.length;
 		const totalTime = (new Date().getTime() - startedAt!.getTime()) / 1000;
 		const resultLetters = letters.filter((l) => answered.includes(l.romaji)).map((l) => l.letter);
-
-		result = { totalLetters, totalTime, letters: resultLetters };
 		highestCombo = Math.max(highestCombo, combo);
+
+		result = {
+			totalLetters: totalLetters,
+			totalTime: totalTime,
+			difficulty: difficulty,
+			highestCombo: highestCombo,
+			letters: resultLetters
+		};
 
 		const allCorrects = resultLetters.length === letters.length;
 		if (allCorrects) {
@@ -187,6 +196,8 @@
 				confettiRadius: 6
 			});
 		}
+
+		onFinished?.(result);
 	}
 
 	function doBlink(type: boolean, callback?: () => void) {
@@ -276,7 +287,12 @@
 		class="fixed bottom-0 left-0 z-20 col-span-2 w-full rounded-xl rounded-b-none border border-l-0 border-gray-700 bg-gray-700 p-4 md:relative md:flex md:flex-col md:rounded-l-none md:rounded-br-xl md:p-0"
 	>
 		{#if !result}
-			<div class="md:min-h-none relative flex h-full min-h-[200px] flex-col py-4 md:py-0">
+			<div
+				class={cn('md:min-h-none relative flex h-full flex-col py-4 md:py-0', {
+					'min-h-[200px]': !canRandomize,
+					'min-h-[240px]': canRandomize
+				})}
+			>
 				{#if startedAt}
 					<div class="mb-4 flex items-center justify-between">
 						<p class="text-lg text-gray-500">
@@ -334,22 +350,35 @@
 					<div
 						class="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center bg-gray-700/80 md:px-8"
 					>
-						<div class="flex flex-col">
-							<h2 class="text-3xl font-bold text-primary-500">Pilih tingkat kesulitan</h2>
-							<div class="mt-4 grid grid-cols-3 gap-3">
-								{#each difficultiOptions as opt}
+						<h2 class="text-3xl font-bold text-primary-500">Pilih tingkat kesulitan</h2>
+						<div class="mt-4 grid w-full grid-cols-3 gap-3">
+							{#each difficultiOptions as opt (opt.value)}
+								<button
+									class={cn(
+										'w-full rounded-xl bg-gray-600 px-3 py-2 text-lg font-semibold text-gray-300 transition-all hover:bg-primary-500 hover:text-white',
+										{ 'bg-primary-500 text-white': difficulty === opt.value }
+									)}
+									onclick={() => (difficulty = opt.value)}
+								>
+									{opt.label}
+								</button>
+							{/each}
+						</div>
+						{#if canRandomize}
+							<div class="mt-4 grid w-full grid-cols-2 gap-2 rounded-xl bg-gray-600 p-2">
+								{#each modeOptions as opt (opt.value)}
 									<button
 										class={cn(
-											'w-full rounded-xl bg-gray-600 p-3 text-lg font-semibold text-gray-300 transition-all hover:bg-primary-500 hover:text-white',
-											{ 'bg-primary-500 text-white': difficulty === opt.value }
+											'rounded-lg bg-gray-600 px-2 py-1 font-semibold text-white transition-all hover:bg-primary-500 hover:text-white',
+											{ 'bg-primary-500 text-white': mode === opt.value }
 										)}
-										onclick={() => (difficulty = opt.value)}
+										onclick={() => (mode = opt.value)}
 									>
 										{opt.label}
 									</button>
 								{/each}
 							</div>
-						</div>
+						{/if}
 						<div class="mt-4 w-full">
 							<button
 								class="w-full rounded-xl bg-primary-500 px-4 py-3 text-lg font-semibold text-white"

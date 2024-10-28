@@ -19,6 +19,23 @@ declare global {
 		| { type: 'header'; value: string }
 		| { type: 'letter'; value: string }
 		| { type: 'question'; romaji: string; letter: string };
+
+	type Difficulty = 'easy' | 'medium' | 'hard';
+
+	type Question = {
+		letter: string;
+		romaji: string;
+		attempts: number;
+		time: number;
+	};
+
+	type Result = {
+		difficulty: Difficulty;
+		highestCombo: number;
+		totalLetters: number;
+		totalTime: number;
+		letters: string[];
+	};
 }
 
 export {};
