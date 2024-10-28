@@ -31,7 +31,7 @@ declare global {
 
 	type Result = {
 		difficulty: Difficulty;
-		highestCombo: number;
+		highestStreak: number;
 		totalLetters: number;
 		totalTime: number;
 		letters: string[];

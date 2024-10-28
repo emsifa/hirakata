@@ -55,7 +55,7 @@
 	let hearts = $state(5);
 	let answered = $derived(questions.filter((q) => q.time > 0).map((q) => q.romaji));
 
-	let highestCombo = $state(0);
+	let highestStreak = $state(0);
 	let combo = $state(0);
 
 	let result: Result | null = $state(null);
@@ -159,8 +159,8 @@
 	}
 
 	function handleWrong() {
-		if (combo > highestCombo) {
-			highestCombo = combo;
+		if (combo > highestStreak) {
+			highestStreak = combo;
 		}
 		combo = 0;
 
@@ -177,13 +177,13 @@
 		const totalLetters = answered.length;
 		const totalTime = (new Date().getTime() - startedAt!.getTime()) / 1000;
 		const resultLetters = letters.filter((l) => answered.includes(l.romaji)).map((l) => l.letter);
-		highestCombo = Math.max(highestCombo, combo);
+		highestStreak = Math.max(highestStreak, combo);
 
 		result = {
 			totalLetters: totalLetters,
 			totalTime: totalTime,
 			difficulty: difficulty,
-			highestCombo: highestCombo,
+			highestStreak: highestStreak,
 			letters: resultLetters
 		};
 
@@ -409,9 +409,9 @@
 							</span>
 						</div>
 						<div class="flex justify-between p-3 text-lg text-gray-300">
-							<span>Combo terbanyak </span>
+							<span>Runtutan terbanyak </span>
 							<span>
-								{highestCombo}x
+								{highestStreak}x
 							</span>
 						</div>
 					</div>

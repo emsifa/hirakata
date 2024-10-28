@@ -16,8 +16,8 @@
 
 	function onFinished(result: Result) {
 		if (
-			(result.difficulty === 'medium' || result.difficulty === 'hard') &&
-			result.highestCombo > 30 &&
+			['hard', 'medium'].includes(result.difficulty) &&
+			result.highestStreak > 30 &&
 			!hasFeature(Feature.RANDOM_KATAKANA)
 		) {
 			addFeature(Feature.RANDOM_KATAKANA);
