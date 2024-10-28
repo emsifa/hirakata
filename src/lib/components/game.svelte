@@ -20,7 +20,7 @@
 	let difficulty: Difficulty = $state('easy');
 	let mode: 'sequence' | 'random' = $state('sequence');
 
-	let difficultiOptions: {
+	let difficultyOptions: {
 		label: string;
 		value: Difficulty;
 	}[] = [
@@ -352,7 +352,7 @@
 					>
 						<h2 class="text-3xl font-bold text-primary-500">Pilih tingkat kesulitan</h2>
 						<div class="mt-4 grid w-full grid-cols-3 gap-3">
-							{#each difficultiOptions as opt (opt.value)}
+							{#each difficultyOptions as opt (opt.value)}
 								<button
 									class={cn(
 										'w-full rounded-xl bg-gray-600 px-3 py-2 text-lg font-semibold text-gray-300 transition-all hover:bg-primary-500 hover:text-white',
