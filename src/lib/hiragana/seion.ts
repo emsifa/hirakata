@@ -1,4 +1,4 @@
-export const hiraganaLetters = (): Letter[] => [
+export const hiraganaSeionLetters = (): Letter[] => [
 	{ letter: 'あ', romaji: 'a' },
 	{ letter: 'い', romaji: 'i' },
 	{ letter: 'う', romaji: 'u' },
@@ -56,7 +56,7 @@ export const hiraganaLetters = (): Letter[] => [
 	{ letter: 'ん', romaji: 'n' }
 ];
 
-export const hiraganaSheets = (): Column[] => [
+export const hiraganaSeisonSheet = (): Column[] => [
 	{ type: 'blank' },
 	{ type: 'header', value: 'A' },
 	{ type: 'header', value: 'I' },

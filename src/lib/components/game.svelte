@@ -11,8 +11,12 @@
 		canRandomize,
 		onFinished,
 		onStarted,
-		onReset
+		onReset,
+		locked,
+		grid = 6
 	}: {
+		grid?: number;
+		locked?: boolean;
 		letters: Letter[];
 		columns: Column[];
 		canRandomize: boolean;
@@ -70,6 +74,9 @@
 	});
 
 	function start() {
+		if (locked) {
+			return;
+		}
 		shuffled = shuffle(letters);
 		startedAt = new Date();
 		questions = clone(letters).map((letter) => ({
@@ -242,10 +249,15 @@
 </script>
 
 <div
-	class="select-none gap-4 rounded-xl bg-gray-700 p-3 shadow-xl shadow-gray-900/30 md:grid md:grid-cols-5 md:p-4"
+	class="relative select-none gap-4 rounded-xl bg-gray-700 p-3 shadow-xl shadow-gray-900/30 md:grid md:grid-cols-5 md:p-4"
 >
 	<div class="col-span-3 mb-[280px] md:mb-0">
-		<div class="grid grid-cols-6 gap-0 overflow-hidden rounded-xl bg-white shadow-gray-300/30">
+		<div
+			class={cn('grid gap-0 overflow-hidden rounded-xl bg-white shadow-gray-300/30', {
+				'grid-cols-6': grid === 6,
+				'grid-cols-3': grid === 3
+			})}
+		>
 			{#each columns as column, i (`column-${column.type}-${i}}`)}
 				<div class="flex flex-col items-center justify-center border border-gray-100 p-2">
 					{#if column.type === 'blank'}
@@ -440,4 +452,35 @@
 		class="pointer-events-none fixed left-0 top-0 z-20 h-full w-full"
 		bind:this={confettiCanvas}
 	></canvas>
+
+	{#if locked}
+		<div
+			class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-gray-700/90 backdrop-blur-sm md:absolute md:rounded-xl"
+		>
+			<div class="flex flex-col items-center justify-center gap-3 px-4 text-center text-white">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="h-12 w-12 text-white"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+					/>
+				</svg>
+				<p>
+					<span class="text-lg font-bold text-white">Fitur Terkunci</span>
+					<br />
+					Kamu harus menyelesaikan mode sebelumnya untuk membuka mode ini.
+				</p>
+				<a href="/" class="rounded-xl bg-primary-500 px-3 py-2 text-lg font-semibold text-white">
+					Kembali
+				</a>
+			</div>
+		</div>
+	{/if}
 </div>

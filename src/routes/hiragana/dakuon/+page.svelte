@@ -3,18 +3,12 @@
 	import Game from '$lib/components/game.svelte';
 	import Menubar from '$lib/components/menubar.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
-	import {
-		addFeature,
-		Feature,
-		hasFeature,
-		meetsHiraganaDakuonRequirements,
-		meetsRandomHiraganaRequirements
-	} from '$lib/features';
-	import { hiraganaSeionLetters, hiraganaSeisonSheet } from '$lib/hiragana/seion';
+	import { addFeature, Feature, hasFeature, meetsHiraganaYoonRequirements } from '$lib/features';
+	import { hiraganaDakuonLetters, hiraganaDakuonSheet } from '$lib/hiragana/dakuon';
 	import { onMount } from 'svelte';
 
-	let letters = hiraganaSeionLetters();
-	let columns = hiraganaSeisonSheet();
+	let letters = hiraganaDakuonLetters();
+	let columns = hiraganaDakuonSheet();
 	let canRandomize = $state(true);
 	let dakuonEnabled = $state(false);
 	let yoonEnabled = $state(false);
@@ -46,16 +40,10 @@
 	}
 
 	function onFinished(result: Result, difficulty: Difficulty, mode: GameplayMode) {
-		if (meetsHiraganaDakuonRequirements(result)) {
-			addFeature(Feature.HIRAGANA_DAKUON);
-			dakuonEnabled = true;
-			alert('Kamu telah membuka fitur baru! Sekarang kamu bisa berlatih huruf dakuon.');
-		}
-
-		if (meetsRandomHiraganaRequirements(result)) {
-			addFeature(Feature.RANDOM_HIRAGANA);
-			canRandomize = true;
-			alert('Kamu telah membuka fitur baru! Sekarang kamu bisa mengacak huruf hiragana.');
+		if (meetsHiraganaYoonRequirements(result)) {
+			addFeature(Feature.HIRAGANA_YOON);
+			yoonEnabled = true;
+			alert('Kamu telah membuka fitur baru! Sekarang kamu bisa berlatih huruf yōon.');
 		}
 
 		if (window.gtag) {
@@ -88,12 +76,20 @@
 		/>
 		<Menubar
 			links={[
-				{ label: 'Seion', href: '/hiragana', locked: false, active: true },
-				{ label: 'Dakuon', href: '/hiragana/dakuon', locked: !dakuonEnabled, active: false },
+				{ label: 'Seion', href: '/hiragana', locked: false, active: false },
+				{ label: 'Dakuon', href: '/hiragana/dakuon', locked: !dakuonEnabled, active: true },
 				{ label: 'Yōon', href: '/hiragana/yoon', locked: !yoonEnabled, active: false }
 			]}
 		/>
-		<Game {letters} {columns} {canRandomize} {onStarted} {onReset} {onFinished} />
+		<Game
+			locked={!dakuonEnabled}
+			{letters}
+			{columns}
+			{canRandomize}
+			{onStarted}
+			{onReset}
+			{onFinished}
+		/>
 		<div class="mt-3 hidden md:block">
 			<Footer />
 		</div>

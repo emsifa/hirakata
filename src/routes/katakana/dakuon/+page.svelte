@@ -3,18 +3,12 @@
 	import Game from '$lib/components/game.svelte';
 	import Menubar from '$lib/components/menubar.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
-	import {
-		addFeature,
-		Feature,
-		hasFeature,
-		meetsKatakanaDakuonRequirements,
-		meetsRandomKatakanaRequirements
-	} from '$lib/features';
-	import { katakanaSeionLetters, katakanaSeionSheet } from '$lib/katakana/seion';
+	import { addFeature, Feature, hasFeature, meetsKatakanaYoonRequirements } from '$lib/features';
+	import { katakanaDakuonLetters, katakanaDakuonSheet } from '$lib/katakana/dakuon';
 	import { onMount } from 'svelte';
 
-	let letters = katakanaSeionLetters();
-	let columns = katakanaSeionSheet();
+	let letters = katakanaDakuonLetters();
+	let columns = katakanaDakuonSheet();
 	let canRandomize = $state(true);
 	let dakuonEnabled = $state(false);
 	let yoonEnabled = $state(false);
@@ -46,18 +40,10 @@
 	}
 
 	function onFinished(result: Result, difficulty: Difficulty, mode: GameplayMode) {
-		if (meetsKatakanaDakuonRequirements(result)) {
-			addFeature(Feature.KATAKANA_DAKUON);
-			dakuonEnabled = true;
-			alert(
-				'Kamu telah membuka fitur baru! Sekarang kamu bisa berlatih huruf katakana dengan dakuten.'
-			);
-		}
-
-		if (meetsRandomKatakanaRequirements(result)) {
-			addFeature(Feature.RANDOM_KATAKANA);
-			canRandomize = true;
-			alert('Kamu telah membuka fitur baru! Sekarang kamu bisa mengacak huruf katakana.');
+		if (meetsKatakanaYoonRequirements(result)) {
+			addFeature(Feature.KATAKANA_YOON);
+			yoonEnabled = true;
+			alert('Kamu telah membuka fitur baru! Sekarang kamu bisa berlatih huruf yōon.');
 		}
 
 		if (window.gtag) {
@@ -90,12 +76,20 @@
 		/>
 		<Menubar
 			links={[
-				{ label: 'Seion', href: '/katakana', locked: false, active: true },
-				{ label: 'Dakuon', href: '/katakana/dakuon', locked: !dakuonEnabled, active: false },
+				{ label: 'Seion', href: '/katakana', locked: false, active: false },
+				{ label: 'Dakuon', href: '/katakana/dakuon', locked: !dakuonEnabled, active: true },
 				{ label: 'Yōon', href: '/katakana/yoon', locked: !yoonEnabled, active: false }
 			]}
 		/>
-		<Game {letters} {columns} {canRandomize} {onStarted} {onReset} {onFinished} />
+		<Game
+			locked={!dakuonEnabled}
+			{letters}
+			{columns}
+			{canRandomize}
+			{onStarted}
+			{onReset}
+			{onFinished}
+		/>
 		<div class="mt-3 hidden md:block">
 			<Footer />
 		</div>
