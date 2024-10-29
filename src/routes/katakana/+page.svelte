@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Footer from '$lib/components/footer.svelte';
 	import Game from '$lib/components/game.svelte';
+	import Menubar from '$lib/components/menubar.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
 	import { addFeature, Feature, hasFeature } from '$lib/features';
 	import { katakanaLetters, katakanaSheets } from '$lib/katakana';
@@ -9,9 +10,13 @@
 	let letters = katakanaLetters();
 	let columns = katakanaSheets();
 	let canRandomize = $state(true);
+	let dakuonEnabled = $state(false);
+	let yoonEnabled = $state(false);
 
 	onMount(() => {
 		canRandomize = hasFeature(Feature.RANDOM_KATAKANA);
+		dakuonEnabled = hasFeature(Feature.KATAKANA_DAKUON);
+		yoonEnabled = hasFeature(Feature.KATAKANA_YOON);
 	});
 
 	function onStarted(difficulty: Difficulty, mode: GameplayMode) {
@@ -72,6 +77,13 @@
 		<PageTitle
 			title="Katakana-kun"
 			description="Teman latihan menghafal huruf katakana secara runut, di saat kamu gabut."
+		/>
+		<Menubar
+			links={[
+				{ label: 'Seion', href: '/katakana', locked: false, active: true },
+				{ label: 'Dakuon', href: '/katakana/dakuon', locked: !dakuonEnabled, active: false },
+				{ label: 'Yōon', href: '/katakana/yoon', locked: !yoonEnabled, active: false }
+			]}
 		/>
 		<Game {letters} {columns} {canRandomize} {onStarted} {onReset} {onFinished} />
 		<div class="mt-3 hidden md:block">
