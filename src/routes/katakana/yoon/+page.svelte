@@ -3,18 +3,12 @@
 	import Game from '$lib/components/game.svelte';
 	import Menubar from '$lib/components/menubar.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
-	import {
-		addFeature,
-		Feature,
-		hasFeature,
-		meetsKatakanaDakuonRequirements,
-		meetsRandomKatakanaRequirements
-	} from '$lib/features';
-	import { katakanaSeionLetters, katakanaSeionSheet } from '$lib/katakana/seion';
+	import { addFeature, Feature, hasFeature } from '$lib/features';
+	import { katakanaYoonLetters, katakanaYoonSheet } from '$lib/katakana/yoon';
 	import { onMount } from 'svelte';
 
-	let letters = katakanaSeionLetters();
-	let columns = katakanaSeionSheet();
+	let letters = katakanaYoonLetters();
+	let columns = katakanaYoonSheet();
 	let canRandomize = $state(true);
 	let dakuonEnabled = $state(false);
 	let yoonEnabled = $state(false);
@@ -46,20 +40,6 @@
 	}
 
 	function onFinished(result: Result, difficulty: Difficulty, mode: GameplayMode) {
-		if (meetsKatakanaDakuonRequirements(result)) {
-			addFeature(Feature.KATAKANA_DAKUON);
-			dakuonEnabled = true;
-			alert(
-				'Kamu telah membuka fitur baru! Sekarang kamu bisa berlatih huruf katakana dengan dakuten.'
-			);
-		}
-
-		if (meetsRandomKatakanaRequirements(result)) {
-			addFeature(Feature.RANDOM_KATAKANA);
-			canRandomize = true;
-			alert('Kamu telah membuka fitur baru! Sekarang kamu bisa mengacak huruf katakana.');
-		}
-
 		if (window.gtag) {
 			window.gtag('event', 'game_finished', {
 				game: 'katakana',
@@ -90,12 +70,21 @@
 		/>
 		<Menubar
 			links={[
-				{ label: 'Seion', href: '/katakana', locked: false, active: true },
+				{ label: 'Seion', href: '/katakana', locked: false, active: false },
 				{ label: 'Dakuon', href: '/katakana/dakuon', locked: !dakuonEnabled, active: false },
-				{ label: 'Yōon', href: '/katakana/yoon', locked: !yoonEnabled, active: false }
+				{ label: 'Yōon', href: '/katakana/yoon', locked: !yoonEnabled, active: true }
 			]}
 		/>
-		<Game {letters} {columns} {canRandomize} {onStarted} {onReset} {onFinished} />
+		<Game
+			grid={3}
+			locked={!yoonEnabled}
+			{letters}
+			{columns}
+			{canRandomize}
+			{onStarted}
+			{onReset}
+			{onFinished}
+		/>
 		<div class="mt-3 hidden md:block">
 			<Footer />
 		</div>

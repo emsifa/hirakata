@@ -46,18 +46,6 @@ export function meetsRandomHiraganaRequirements(result: Result): boolean {
 	);
 }
 
-export function meetsRandomKatakanaRequirements(result: Result): boolean {
-	const difficultyRequirements = ['hard', 'medium'];
-	const minHighestStreak = 30;
-	const minLettersAnswered = 46;
-
-	return (
-		minLettersAnswered >= result.letters.length &&
-		difficultyRequirements.includes(result.difficulty) &&
-		result.highestStreak >= minHighestStreak
-	);
-}
-
 export function meetsHiraganaDakuonRequirements(result: Result): boolean {
 	const difficultyRequirements = ['hard', 'medium'];
 	const minLettersAnswered = 46;
@@ -80,4 +68,16 @@ export function meetsHiraganaYoonRequirements(result: Result): boolean {
 		difficultyRequirements.includes(result.difficulty) &&
 		result.highestStreak >= minHighestStreak
 	);
+}
+
+export function meetsRandomKatakanaRequirements(result: Result): boolean {
+	return meetsRandomHiraganaRequirements(result);
+}
+
+export function meetsKatakanaDakuonRequirements(result: Result): boolean {
+	return meetsHiraganaDakuonRequirements(result);
+}
+
+export function meetsKatakanaYoonRequirements(result: Result): boolean {
+	return meetsHiraganaYoonRequirements(result);
 }

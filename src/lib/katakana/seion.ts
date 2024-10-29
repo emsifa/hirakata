@@ -1,4 +1,4 @@
-export const katakanaLetters = (): Letter[] => [
+export const katakanaSeionLetters = (): Letter[] => [
 	{ letter: 'ア', romaji: 'a' },
 	{ letter: 'イ', romaji: 'i' },
 	{ letter: 'ウ', romaji: 'u' },
@@ -56,7 +56,7 @@ export const katakanaLetters = (): Letter[] => [
 	{ letter: 'ン', romaji: 'n' }
 ];
 
-export const katakanaSheets = (): Column[] => [
+export const katakanaSeionSheet = (): Column[] => [
 	{ type: 'blank' },
 	{ type: 'header', value: 'A' },
 	{ type: 'header', value: 'I' },
