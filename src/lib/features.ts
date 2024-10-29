@@ -69,3 +69,15 @@ export function meetsHiraganaDakuonRequirements(result: Result): boolean {
 		result.highestStreak >= minHighestStreak
 	);
 }
+
+export function meetsHiraganaYoonRequirements(result: Result): boolean {
+	const difficultyRequirements = ['hard', 'medium'];
+	const minLettersAnswered = 25; // 25 because there are 25 dakuon letters
+	const minHighestStreak = 25;
+
+	return (
+		minLettersAnswered >= result.letters.length &&
+		difficultyRequirements.includes(result.difficulty) &&
+		result.highestStreak >= minHighestStreak
+	);
+}

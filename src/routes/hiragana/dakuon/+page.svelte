@@ -3,7 +3,7 @@
 	import Game from '$lib/components/game.svelte';
 	import Menubar from '$lib/components/menubar.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
-	import { Feature, hasFeature } from '$lib/features';
+	import { addFeature, Feature, hasFeature, meetsHiraganaYoonRequirements } from '$lib/features';
 	import { hiraganaDakuonLetters, hiraganaDakuonSheet } from '$lib/hiragana/dakuon';
 	import { onMount } from 'svelte';
 
@@ -40,6 +40,12 @@
 	}
 
 	function onFinished(result: Result, difficulty: Difficulty, mode: GameplayMode) {
+		if (meetsHiraganaYoonRequirements(result)) {
+			addFeature(Feature.HIRAGANA_YOON);
+			yoonEnabled = true;
+			alert('Kamu telah membuka fitur baru! Sekarang kamu bisa berlatih huruf yōon.');
+		}
+
 		if (window.gtag) {
 			window.gtag('event', 'game_finished', {
 				game: 'hiragana',
