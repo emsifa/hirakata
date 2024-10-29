@@ -12,8 +12,10 @@
 		onFinished,
 		onStarted,
 		onReset,
-		locked
+		locked,
+		grid = 6
 	}: {
+		grid?: number;
 		locked?: boolean;
 		letters: Letter[];
 		columns: Column[];
@@ -250,7 +252,12 @@
 	class="relative select-none gap-4 rounded-xl bg-gray-700 p-3 shadow-xl shadow-gray-900/30 md:grid md:grid-cols-5 md:p-4"
 >
 	<div class="col-span-3 mb-[280px] md:mb-0">
-		<div class="grid grid-cols-6 gap-0 overflow-hidden rounded-xl bg-white shadow-gray-300/30">
+		<div
+			class={cn('grid gap-0 overflow-hidden rounded-xl bg-white shadow-gray-300/30', {
+				'grid-cols-6': grid === 6,
+				'grid-cols-3': grid === 3
+			})}
+		>
 			{#each columns as column, i (`column-${column.type}-${i}}`)}
 				<div class="flex flex-col items-center justify-center border border-gray-100 p-2">
 					{#if column.type === 'blank'}

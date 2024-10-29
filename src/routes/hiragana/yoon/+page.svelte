@@ -3,12 +3,12 @@
 	import Game from '$lib/components/game.svelte';
 	import Menubar from '$lib/components/menubar.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
-	import { Feature, hasFeature } from '$lib/features';
-	import { hiraganaDakuonLetters, hiraganaDakuonSheet } from '$lib/hiragana/dakuon';
+	import { addFeature, Feature, hasFeature } from '$lib/features';
+	import { hiraganaYoonLetters, hiraganaYoonSheet } from '$lib/hiragana/yoon';
 	import { onMount } from 'svelte';
 
-	let letters = hiraganaDakuonLetters();
-	let columns = hiraganaDakuonSheet();
+	let letters = hiraganaYoonLetters();
+	let columns = hiraganaYoonSheet();
 	let canRandomize = $state(true);
 	let dakuonEnabled = $state(false);
 	let yoonEnabled = $state(false);
@@ -71,12 +71,13 @@
 		<Menubar
 			links={[
 				{ label: 'Seion', href: '/hiragana', locked: false, active: false },
-				{ label: 'Dakuon', href: '/hiragana/dakuon', locked: !dakuonEnabled, active: true },
-				{ label: 'Yōon', href: '/hiragana/yoon', locked: !yoonEnabled, active: false }
+				{ label: 'Dakuon', href: '/hiragana/dakuon', locked: !dakuonEnabled, active: false },
+				{ label: 'Yōon', href: '/hiragana/yoon', locked: !yoonEnabled, active: true }
 			]}
 		/>
 		<Game
-			locked={!dakuonEnabled}
+			grid={3}
+			locked={!yoonEnabled}
 			{letters}
 			{columns}
 			{canRandomize}
