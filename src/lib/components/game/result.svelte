@@ -1,12 +1,10 @@
 <script lang="ts">
 	let {
 		result,
-		letters,
-		highestStreak
+		letters
 	}: {
 		result: Result;
 		letters: Letter[];
-		highestStreak: number;
 	} = $props();
 </script>
 
@@ -27,7 +25,7 @@
 	<div class="flex justify-between p-3 text-lg text-gray-300">
 		<span>Runtutan terbanyak </span>
 		<span>
-			{highestStreak}x
+			{result.highestStreak}x
 		</span>
 	</div>
 </div>
