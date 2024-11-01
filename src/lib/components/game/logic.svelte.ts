@@ -19,7 +19,6 @@ const modeOptions: {
 
 export function createGame({
 	letters,
-	locked,
 	onStarted,
 	onNext,
 	onCorrect,
@@ -28,7 +27,6 @@ export function createGame({
 	onFinished
 }: {
 	letters: Letter[];
-	locked: boolean;
 	onNext: (letter: Letter) => void;
 	onCorrect: () => void;
 	onWrong: () => void;
@@ -36,6 +34,7 @@ export function createGame({
 	onFinished: (result: Result) => void;
 	onStarted: (gameplay: Gameplay) => void;
 }) {
+	let locked: boolean = $state(false);
 	let difficulty: Difficulty = $state('easy');
 	let mode: GameplayMode = $state('sequence');
 
@@ -117,6 +116,10 @@ export function createGame({
 		},
 		get result() {
 			return result;
+		},
+
+		setLocked(value: boolean) {
+			locked = value;
 		},
 
 		setMode(value: GameplayMode) {

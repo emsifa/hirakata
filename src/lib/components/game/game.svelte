@@ -36,7 +36,6 @@
 
 	const game = createGame({
 		letters,
-		locked: !!locked,
 		onStarted({ difficulty, mode }) {
 			onStarted?.(difficulty, mode);
 		},
@@ -70,6 +69,15 @@
 	onMount(() => {
 		confetti = new JSConfetti({ canvas: confettiCanvas! });
 		synth = window.speechSynthesis;
+
+		return () => {
+			synth?.cancel();
+			confetti?.clearCanvas();
+		};
+	});
+
+	$effect(() => {
+		game.setLocked(!!locked);
 	});
 
 	function confirmReset() {
