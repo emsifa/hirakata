@@ -41,7 +41,7 @@ export function meetsRandomHiraganaRequirements(result: Result): boolean {
 
 	return (
 		minLettersAnswered >= result.letters.length &&
-		difficultyRequirements.includes(result.difficulty) &&
+		difficultyRequirements.includes(result.gameplay.difficulty) &&
 		result.highestStreak >= minHighestStreak
 	);
 }
@@ -53,7 +53,7 @@ export function meetsHiraganaDakuonRequirements(result: Result): boolean {
 
 	return (
 		minLettersAnswered >= result.letters.length &&
-		difficultyRequirements.includes(result.difficulty) &&
+		difficultyRequirements.includes(result.gameplay.difficulty) &&
 		result.highestStreak >= minHighestStreak
 	);
 }
@@ -65,7 +65,7 @@ export function meetsHiraganaYoonRequirements(result: Result): boolean {
 
 	return (
 		minLettersAnswered >= result.letters.length &&
-		difficultyRequirements.includes(result.difficulty) &&
+		difficultyRequirements.includes(result.gameplay.difficulty) &&
 		result.highestStreak >= minHighestStreak
 	);
 }
