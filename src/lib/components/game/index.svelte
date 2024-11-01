@@ -3,7 +3,12 @@
 	import JSConfetti from 'js-confetti';
 	import { clone, shuffle } from 'radash';
 	import { onMount } from 'svelte';
-	import Footer from './footer.svelte';
+	import Footer from '../footer.svelte';
+	import Infobar from './infobar.svelte';
+	import Option from './option.svelte';
+	import LockedMessage from './locked-message.svelte';
+	import Column from './column.svelte';
+	import Result from './result.svelte';
 
 	let {
 		letters,
@@ -64,7 +69,7 @@
 	let answered = $derived(questions.filter((q) => q.time > 0).map((q) => q.romaji));
 
 	let highestStreak = $state(0);
-	let combo = $state(0);
+	let currentStreak = $state(0);
 
 	let result: Result | null = $state(null);
 
@@ -103,7 +108,7 @@
 		blink = null;
 		hearts = 5;
 		result = null;
-		combo = 0;
+		currentStreak = 0;
 
 		confetti?.clearCanvas();
 
@@ -146,7 +151,7 @@
 	}
 
 	function isAsking(romaji?: string) {
-		return startedAt && question?.romaji === romaji;
+		return !!startedAt && question?.romaji === romaji;
 	}
 
 	function answer(romaji: string) {
@@ -165,8 +170,8 @@
 
 		current.time = new Date().getTime() - questionStartedAt;
 
-		combo += 1;
-		if (combo % 5 === 0 && hearts < 5) {
+		currentStreak += 1;
+		if (currentStreak % 5 === 0 && hearts < 5) {
 			hearts += 1;
 		}
 
@@ -174,10 +179,10 @@
 	}
 
 	function handleWrong() {
-		if (combo > highestStreak) {
-			highestStreak = combo;
+		if (currentStreak > highestStreak) {
+			highestStreak = currentStreak;
 		}
-		combo = 0;
+		currentStreak = 0;
 
 		hearts -= 1;
 		if (hearts === 0) {
@@ -192,7 +197,7 @@
 		const totalLetters = answered.length;
 		const totalTime = (new Date().getTime() - startedAt!.getTime()) / 1000;
 		const resultLetters = letters.filter((l) => answered.includes(l.romaji)).map((l) => l.letter);
-		highestStreak = Math.max(highestStreak, combo);
+		highestStreak = Math.max(highestStreak, currentStreak);
 
 		result = {
 			totalLetters: totalLetters,
@@ -226,7 +231,7 @@
 	function isBlinking(romaji?: string, type?: boolean) {
 		return typeof type === 'boolean'
 			? blink === type && question?.romaji === romaji
-			: blink && question?.romaji === romaji;
+			: !!blink && question?.romaji === romaji;
 	}
 
 	function speak(letter: string) {
@@ -259,44 +264,7 @@
 			})}
 		>
 			{#each columns as column, i (`column-${column.type}-${i}}`)}
-				<div class="flex flex-col items-center justify-center border border-gray-100 p-2">
-					{#if column.type === 'blank'}
-						&nbsp;
-					{:else if column.type === 'header'}
-						<h2 class="text-lg font-bold text-primary-500">{column.value}</h2>
-					{:else if column.type === 'letter'}
-						<h2 class="text-lg font-bold text-primary-500">{column.value}</h2>
-					{:else if column.type === 'question'}
-						<button
-							class={cn('relative w-full rounded-lg p-2', {
-								'text-gray-800': answered.includes(column.romaji ?? ''),
-								'bg-primary-100 text-primary-600':
-									isAsking(column.romaji) && !isBlinking(column.romaji),
-								'bg-primary-300 text-primary-800':
-									isAsking(column.romaji) && isBlinking(column.romaji),
-								'bg-rose-100 text-rose-600': isBlinking(column.romaji, false),
-								'cursor-default text-gray-400':
-									question?.romaji !== column.romaji && !answered.includes(column.romaji ?? '')
-							})}
-							onclick={() => speak(column.letter ?? '')}
-						>
-							<span
-								class={cn(`inline-flex transition-all`, {
-									'scale-[1.5]': isAsking(column.romaji) || answered.includes(column.romaji ?? '')
-								})}
-							>
-								{answered.includes(column.romaji ?? '') ? column.letter : column.romaji}
-							</span>
-							{#if answered.includes(column.romaji ?? '')}
-								<span
-									class="absolute right-0 top-0 rounded-full rounded-bl-lg p-1 text-xs text-black/30"
-								>
-									{column.romaji}
-								</span>
-							{/if}
-						</button>
-					{/if}
-				</div>
+				<Column {column} {isAsking} {isBlinking} {answered} {question} {speak} />
 			{/each}
 		</div>
 		<div class="mt-3 block md:hidden">
@@ -314,44 +282,25 @@
 				})}
 			>
 				{#if startedAt}
-					<div class="mb-4 flex items-center justify-between">
-						<p class="text-lg text-gray-500">
-							{questionIndex + 1} / {letters.length}
-						</p>
-						<div class="text-gray-500">
-							{combo}x
-						</div>
-						<div class="inline-flex gap-1">
-							{#each { length: hearts } as _}
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 512 512"
-									class="h-5 w-5 fill-rose-400"
-									><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path
-										d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"
-									/></svg
-								>
-							{/each}
-						</div>
-					</div>
+					<Infobar
+						{hearts}
+						{currentStreak}
+						questionNumber={questionIndex + 1}
+						totalQuestions={questions.length}
+					/>
 				{/if}
 
 				<div class="max-h-[180px] flex-1 overflow-auto md:max-h-none">
 					<div class="grid grid-cols-5 gap-2">
 						{#each options as opt (opt.letter)}
-							<button
-								class={cn(
-									'w-full rounded-lg bg-gray-600 p-2 text-center text-lg font-normal transition-all hover:bg-white hover:text-gray-800 hover:shadow-lg hover:shadow-gray-300/30',
-									{
-										'text-white': startedAt,
-										'bg-primary-500 text-white': isBlinking(opt.romaji, true),
-										'bg-rose-500 text-white': isBlinking(opt.romaji, false)
-									}
-								)}
-								onclick={() => answer(opt.romaji)}
-							>
-								{opt.letter}
-							</button>
+							<Option
+								label={opt.letter}
+								value={opt.romaji}
+								started={!!startedAt}
+								blinkCorrect={isBlinking(opt.romaji, true) ?? false}
+								blinkWrong={isBlinking(opt.romaji, false) ?? false}
+								onClick={answer}
+							/>
 						{/each}
 					</div>
 				</div>
@@ -415,27 +364,7 @@
 			<div class="">
 				<h2 class="mb-4 text-3xl font-bold text-primary-500">Hasil</h2>
 				<div class="flex flex-col">
-					<div class="rounded-xl bg-gray-600">
-						<div class="flex justify-between border-b border-gray-700 p-3 text-lg text-gray-300">
-							<span>Jumlah huruf</span>
-							<span>
-								{result.totalLetters ?? 1} dari {letters.length}
-								({((result.totalLetters / letters.length) * 100).toFixed(0)}%)
-							</span>
-						</div>
-						<div class="flex justify-between border-b border-gray-700 p-3 text-lg text-gray-300">
-							<span>Waktu </span>
-							<span>
-								{result.totalTime.toFixed(2) ?? 2}s
-							</span>
-						</div>
-						<div class="flex justify-between p-3 text-lg text-gray-300">
-							<span>Runtutan terbanyak </span>
-							<span>
-								{highestStreak}x
-							</span>
-						</div>
-					</div>
+					<Result {result} {letters} {highestStreak} />
 				</div>
 				<div class="mt-4">
 					<button
@@ -448,39 +377,13 @@
 			</div>
 		{/if}
 	</div>
+
 	<canvas
 		class="pointer-events-none fixed left-0 top-0 z-20 h-full w-full"
 		bind:this={confettiCanvas}
 	></canvas>
 
 	{#if locked}
-		<div
-			class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-gray-700/90 backdrop-blur-sm md:absolute md:rounded-xl"
-		>
-			<div class="flex flex-col items-center justify-center gap-3 px-4 text-center text-white">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="h-12 w-12 text-white"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-					/>
-				</svg>
-				<p>
-					<span class="text-lg font-bold text-white">Fitur Terkunci</span>
-					<br />
-					Kamu harus menyelesaikan mode sebelumnya untuk membuka mode ini.
-				</p>
-				<a href="/" class="rounded-xl bg-primary-500 px-3 py-2 text-lg font-semibold text-white">
-					Kembali
-				</a>
-			</div>
-		</div>
+		<LockedMessage />
 	{/if}
 </div>
