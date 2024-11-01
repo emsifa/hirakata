@@ -14,11 +14,18 @@ declare global {
 		romaji: string;
 	};
 
+	type QuestionColumn = { type: 'question'; romaji: string; letter: string };
+
+	type Gameplay = {
+		difficulty: Difficulty;
+		mode: GameplayMode;
+	};
+
 	type Column =
 		| { type: 'blank' }
 		| { type: 'header'; value: string }
 		| { type: 'letter'; value: string }
-		| { type: 'question'; romaji: string; letter: string };
+		| QuestionColumn;
 
 	type Difficulty = 'easy' | 'medium' | 'hard';
 
@@ -32,7 +39,7 @@ declare global {
 	};
 
 	type Result = {
-		difficulty: Difficulty;
+		gameplay: Gameplay;
 		highestStreak: number;
 		totalLetters: number;
 		totalTime: number;

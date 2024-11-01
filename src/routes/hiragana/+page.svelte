@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Footer from '$lib/components/footer.svelte';
-	import Game from '$lib/components/game.svelte';
+	import Game from '$lib/components/game/game.svelte';
 	import Menubar from '$lib/components/menubar.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
 	import {
@@ -45,7 +45,7 @@
 		}
 	}
 
-	function onFinished(result: Result, difficulty: Difficulty, mode: GameplayMode) {
+	function onFinished(result: Result) {
 		if (meetsHiraganaDakuonRequirements(result)) {
 			addFeature(Feature.HIRAGANA_DAKUON);
 			dakuonEnabled = true;
@@ -61,8 +61,8 @@
 		if (window.gtag) {
 			window.gtag('event', 'game_finished', {
 				game: 'hiragana',
-				difficulty,
-				mode,
+				difficulty: result.gameplay.difficulty,
+				mode: result.gameplay.mode,
 				result
 			});
 		}
