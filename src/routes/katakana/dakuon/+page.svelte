@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Footer from '$lib/components/footer.svelte';
-	import Game from '$lib/components/game/game.svelte';
+	import Game from '$lib/components/sheet-game/game.svelte';
 	import Menubar from '$lib/components/menubar.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
 	import { addFeature, Feature, hasFeature, meetsKatakanaYoonRequirements } from '$lib/features';
