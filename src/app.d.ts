@@ -45,6 +45,13 @@ declare global {
 		totalTime: number;
 		letters: string[];
 	};
+
+	type SpeedReadingGameResult = {
+		totalWords: number;
+		totalLetters: number;
+		totalWrongs: number;
+		totalAttempts: number;
+	};
 }
 
 export {};
