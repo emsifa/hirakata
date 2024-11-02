@@ -39,8 +39,11 @@
 		onStarted({ difficulty, mode }) {
 			onStarted?.(difficulty, mode);
 		},
-		onNext({ letter }) {
+		onNext({ letter, romaji }) {
 			speak(letter);
+
+			const question = document.getElementById(`question-${romaji}`);
+			question?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
 		},
 		onCorrect() {
 			playSoundCorrect();

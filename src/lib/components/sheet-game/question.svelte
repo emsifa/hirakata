@@ -23,6 +23,7 @@
 </script>
 
 <button
+	id={`question-${column.romaji}`}
 	class={cn('relative w-full rounded-lg p-2', {
 		'text-gray-800': answered.includes(column.romaji ?? ''),
 		'bg-primary-100 text-primary-600': isActive && !blinking,
