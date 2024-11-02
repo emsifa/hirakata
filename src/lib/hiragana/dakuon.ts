@@ -30,7 +30,7 @@ export const hiraganaDakuonLetters = (): Letter[] => [
 	{ letter: 'ぽ', romaji: 'po' }
 ];
 
-export const hiraganaDakuonSheet = (): Column[] => [
+export const hiraganaDakuonSheet = (): SheetGameColumn[] => [
 	{ type: 'blank' },
 	{ type: 'header', value: 'A' },
 	{ type: 'header', value: 'I' },

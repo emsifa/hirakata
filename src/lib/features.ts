@@ -34,7 +34,7 @@ export function getFeatures() {
 	}
 }
 
-export function meetsRandomHiraganaRequirements(result: Result): boolean {
+export function meetsRandomHiraganaRequirements(result: SheetGameResult): boolean {
 	const difficultyRequirements = ['hard', 'medium'];
 	const minHighestStreak = 30;
 	const minLettersAnswered = 46;
@@ -46,7 +46,7 @@ export function meetsRandomHiraganaRequirements(result: Result): boolean {
 	);
 }
 
-export function meetsHiraganaDakuonRequirements(result: Result): boolean {
+export function meetsHiraganaDakuonRequirements(result: SheetGameResult): boolean {
 	const difficultyRequirements = ['hard', 'medium'];
 	const minLettersAnswered = 46;
 	const minHighestStreak = 30;
@@ -58,7 +58,7 @@ export function meetsHiraganaDakuonRequirements(result: Result): boolean {
 	);
 }
 
-export function meetsHiraganaYoonRequirements(result: Result): boolean {
+export function meetsHiraganaYoonRequirements(result: SheetGameResult): boolean {
 	const difficultyRequirements = ['hard', 'medium'];
 	const minLettersAnswered = 25; // 25 because there are 25 dakuon letters
 	const minHighestStreak = 25;
@@ -70,14 +70,14 @@ export function meetsHiraganaYoonRequirements(result: Result): boolean {
 	);
 }
 
-export function meetsRandomKatakanaRequirements(result: Result): boolean {
+export function meetsRandomKatakanaRequirements(result: SheetGameResult): boolean {
 	return meetsRandomHiraganaRequirements(result);
 }
 
-export function meetsKatakanaDakuonRequirements(result: Result): boolean {
+export function meetsKatakanaDakuonRequirements(result: SheetGameResult): boolean {
 	return meetsHiraganaDakuonRequirements(result);
 }
 
-export function meetsKatakanaYoonRequirements(result: Result): boolean {
+export function meetsKatakanaYoonRequirements(result: SheetGameResult): boolean {
 	return meetsHiraganaYoonRequirements(result);
 }

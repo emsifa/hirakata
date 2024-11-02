@@ -19,7 +19,7 @@
 		yoonEnabled = hasFeature(Feature.KATAKANA_YOON);
 	});
 
-	function onStarted(difficulty: Difficulty, mode: GameplayMode) {
+	function onStarted(difficulty: SheetGameDifficulty, mode: SheetGameMode) {
 		if (window.gtag) {
 			window.gtag('event', 'game_started', {
 				game: 'katakana',
@@ -29,7 +29,7 @@
 		}
 	}
 
-	function onReset(inGame: boolean, difficulty: Difficulty, mode: GameplayMode) {
+	function onReset(inGame: boolean, difficulty: SheetGameDifficulty, mode: SheetGameMode) {
 		if (inGame && window.gtag) {
 			window.gtag('event', 'game_reset', {
 				game: 'katakana',
@@ -39,7 +39,7 @@
 		}
 	}
 
-	function onFinished(result: Result) {
+	function onFinished(result: SheetGameResult) {
 		if (window.gtag) {
 			window.gtag('event', 'game_finished', {
 				game: 'katakana',

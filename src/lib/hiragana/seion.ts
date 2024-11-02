@@ -56,7 +56,7 @@ export const hiraganaSeionLetters = (): Letter[] => [
 	{ letter: 'ん', romaji: 'n' }
 ];
 
-export const hiraganaSeisonSheet = (): Column[] => [
+export const hiraganaSeisonSheet = (): SheetGameColumn[] => [
 	{ type: 'blank' },
 	{ type: 'header', value: 'A' },
 	{ type: 'header', value: 'I' },

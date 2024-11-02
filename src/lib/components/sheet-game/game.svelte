@@ -7,8 +7,8 @@
 	import LockedMessage from './locked-message.svelte';
 	import { createGame } from './logic.svelte';
 	import Option from './option.svelte';
-	import Question from './question.svelte';
-	import Result from './result.svelte';
+	import SheetGameQuestion from './question.svelte';
+	import SheetGameResult from './result.svelte';
 
 	let {
 		letters,
@@ -23,11 +23,11 @@
 		grid?: number;
 		locked?: boolean;
 		letters: Letter[];
-		columns: Column[];
+		columns: SheetGameColumn[];
 		canRandomize: boolean;
-		onStarted?: (difficulty: Difficulty, mode: GameplayMode) => void;
-		onReset?: (inGame: boolean, difficulty: Difficulty, mode: GameplayMode) => void;
-		onFinished?: (result: Result) => void;
+		onStarted?: (difficulty: SheetGameDifficulty, mode: SheetGameMode) => void;
+		onReset?: (inGame: boolean, difficulty: SheetGameDifficulty, mode: SheetGameMode) => void;
+		onFinished?: (result: SheetGameResult) => void;
 	} = $props();
 
 	let confettiCanvas: HTMLCanvasElement | null = null;
@@ -54,7 +54,7 @@
 		onReset() {
 			confetti?.clearCanvas();
 		},
-		onFinished(result: Result) {
+		onFinished(result: SheetGameResult) {
 			const allCorrects = letters.length === result.totalLetters;
 			if (allCorrects) {
 				confetti?.addConfetti({
@@ -126,7 +126,7 @@
 					{:else if column.type === 'letter'}
 						<h2 class="text-lg font-bold text-primary-500">{column.value}</h2>
 					{:else if column.type === 'question'}
-						<Question
+						<SheetGameQuestion
 							{column}
 							answered={game.answered}
 							isActive={game.question?.romaji === column.romaji}
@@ -235,7 +235,7 @@
 			<div class="">
 				<h2 class="mb-4 text-3xl font-bold text-primary-500">Hasil</h2>
 				<div class="flex flex-col">
-					<Result result={game.result} {letters} />
+					<SheetGameResult result={game.result} {letters} />
 				</div>
 				<div class="mt-4">
 					<button

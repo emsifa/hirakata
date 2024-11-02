@@ -2,7 +2,7 @@ import { clone, shuffle } from 'radash';
 
 const difficultyOptions: {
 	label: string;
-	value: Difficulty;
+	value: SheetGameDifficulty;
 }[] = [
 	{ label: 'Mudah', value: 'easy' },
 	{ label: 'Sedang', value: 'medium' },
@@ -30,19 +30,19 @@ export function createGame({
 	onNext: (letter: Letter) => void;
 	onCorrect: () => void;
 	onWrong: () => void;
-	onReset: (gameplay: Gameplay) => void;
-	onFinished: (result: Result) => void;
-	onStarted: (gameplay: Gameplay) => void;
+	onReset: (gameplay: SheetGameGameplay) => void;
+	onFinished: (result: SheetGameResult) => void;
+	onStarted: (gameplay: SheetGameGameplay) => void;
 }) {
 	let locked: boolean = $state(false);
-	let difficulty: Difficulty = $state('easy');
-	let mode: GameplayMode = $state('sequence');
+	let difficulty: SheetGameDifficulty = $state('easy');
+	let mode: SheetGameMode = $state('sequence');
 
 	let shuffled: typeof letters = $state(clone(letters));
 	let options: typeof letters = $state(clone(letters));
 	let startedAt: Date | null = $state(null);
 
-	let questions: Question[] = $state([]);
+	let questions: SheetGameQuestion[] = $state([]);
 	let questionIndex = $state(-1);
 
 	let attempts = $state(0);
@@ -60,7 +60,7 @@ export function createGame({
 	const answered = $derived(questions.filter((q) => q.time > 0).map((q) => q.romaji));
 	const gameplay = $derived({ difficulty, mode });
 
-	let result: Result | null = $state(null);
+	let result: SheetGameResult | null = $state(null);
 
 	return {
 		get difficultyOptions() {
@@ -122,11 +122,11 @@ export function createGame({
 			locked = value;
 		},
 
-		setMode(value: GameplayMode) {
+		setMode(value: SheetGameMode) {
 			mode = value;
 		},
 
-		setDifficulty(value: Difficulty) {
+		setDifficulty(value: SheetGameDifficulty) {
 			difficulty = value;
 		},
 
@@ -182,7 +182,7 @@ export function createGame({
 			}
 		},
 
-		generateOptions(question: Question): typeof letters {
+		generateOptions(question: SheetGameQuestion): typeof letters {
 			if (difficulty === 'hard') {
 				return shuffle(shuffled.filter((l) => !answered.includes(l.romaji)));
 			} else if (difficulty === 'medium') {
@@ -213,7 +213,7 @@ export function createGame({
 			return correct ? this.handleCorrect(current) : this.handleWrong();
 		},
 
-		handleCorrect(current: Question) {
+		handleCorrect(current: SheetGameQuestion) {
 			current.time = new Date().getTime() - questionStartedAt;
 			currentStreak += 1;
 			if (currentStreak % 5 === 0 && hearts < 5) {

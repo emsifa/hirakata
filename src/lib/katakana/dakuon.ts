@@ -30,7 +30,7 @@ export const katakanaDakuonLetters = (): Letter[] => [
 	{ letter: 'ポ', romaji: 'po' }
 ];
 
-export const katakanaDakuonSheet = (): Column[] => [
+export const katakanaDakuonSheet = (): SheetGameColumn[] => [
 	{ type: 'blank' },
 	{ type: 'header', value: 'A' },
 	{ type: 'header', value: 'I' },

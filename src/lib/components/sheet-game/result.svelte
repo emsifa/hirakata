@@ -3,7 +3,7 @@
 		result,
 		letters
 	}: {
-		result: Result;
+		result: SheetGameResult;
 		letters: Letter[];
 	} = $props();
 </script>

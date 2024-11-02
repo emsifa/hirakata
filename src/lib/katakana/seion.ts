@@ -56,7 +56,7 @@ export const katakanaSeionLetters = (): Letter[] => [
 	{ letter: 'ン', romaji: 'n' }
 ];
 
-export const katakanaSeionSheet = (): Column[] => [
+export const katakanaSeionSheet = (): SheetGameColumn[] => [
 	{ type: 'blank' },
 	{ type: 'header', value: 'A' },
 	{ type: 'header', value: 'I' },

@@ -14,32 +14,32 @@ declare global {
 		romaji: string;
 	};
 
-	type QuestionColumn = { type: 'question'; romaji: string; letter: string };
+	type SheetGameQuestionColumn = { type: 'question'; romaji: string; letter: string };
 
-	type Gameplay = {
-		difficulty: Difficulty;
-		mode: GameplayMode;
+	type SheetGameGameplay = {
+		difficulty: SheetGameDifficulty;
+		mode: SheetGameMode;
 	};
 
-	type Column =
+	type SheetGameColumn =
 		| { type: 'blank' }
 		| { type: 'header'; value: string }
 		| { type: 'letter'; value: string }
-		| QuestionColumn;
+		| SheetGameQuestionColumn;
 
-	type Difficulty = 'easy' | 'medium' | 'hard';
+	type SheetGameDifficulty = 'easy' | 'medium' | 'hard';
 
-	type GameplayMode = 'sequence' | 'random';
+	type SheetGameMode = 'sequence' | 'random';
 
-	type Question = {
+	type SheetGameQuestion = {
 		letter: string;
 		romaji: string;
 		attempts: number;
 		time: number;
 	};
 
-	type Result = {
-		gameplay: Gameplay;
+	type SheetGameResult = {
+		gameplay: SheetGameGameplay;
 		highestStreak: number;
 		totalLetters: number;
 		totalTime: number;

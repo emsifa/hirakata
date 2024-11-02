@@ -44,7 +44,7 @@ export const katakanaYoonLetters = (): Letter[] => [
 	{ letter: 'リョ', romaji: 'ryo' }
 ];
 
-export const katakanaYoonSheet = (): Column[] =>
+export const katakanaYoonSheet = (): SheetGameColumn[] =>
 	katakanaYoonLetters().map((letter) => ({
 		type: 'question',
 		...letter

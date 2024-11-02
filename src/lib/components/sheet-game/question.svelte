@@ -10,7 +10,7 @@
 		hasAnswered,
 		onClick
 	}: {
-		column: QuestionColumn;
+		column: SheetGameQuestionColumn;
 		isActive: boolean;
 		isCorrectBlinking: boolean;
 		isWrongBlinking: boolean;
