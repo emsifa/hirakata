@@ -40,6 +40,8 @@
 
 	let result: SpeedReadingGameResult | null = $state(null);
 
+	let wrongRate = $derived((totalWrongs / totalAttempts) * 100);
+
 	function start() {
 		reset();
 		runCountdown(60);
@@ -63,6 +65,7 @@
 		totalWords = 0;
 		totalLetters = 0;
 		totalWrongs = 0;
+		totalAttempts = 0;
 		answers = [];
 		answerIndexes = [];
 		activeQuestionIndex = 0;
@@ -225,9 +228,9 @@
 									<div
 										class="flex justify-between border-b border-gray-700 p-3 text-lg text-gray-300"
 									>
-										<span>Rate Berhasil</span>
+										<span>Rate Kesalahan</span>
 										<span>
-											{((result.totalLetters / result.totalAttempts) * 100).toFixed(2)}%
+											{wrongRate.toFixed(2)}%
 										</span>
 									</div>
 								</div>
