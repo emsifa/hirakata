@@ -4,7 +4,7 @@ import { hiraganaYoonLetters } from '$lib/hiragana/yoon';
 import { katakanaDakuonLetters } from '$lib/katakana/dakuon';
 import { katakanaSeionLetters } from '$lib/katakana/seion';
 import { katakanaYoonLetters } from '$lib/katakana/yoon';
-import { alphabetical, clone, random, range, shuffle, sort } from 'radash';
+import { alphabetical, clone, random, range, shuffle } from 'radash';
 
 const hiraganaLetters = [...hiraganaSeionLetters(), ...hiraganaDakuonLetters()];
 const katakanaLetters = [...katakanaSeionLetters(), ...katakanaDakuonLetters()];
