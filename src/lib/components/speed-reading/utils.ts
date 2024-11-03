@@ -60,7 +60,7 @@ export function generateOptions(
 	const remaining = count - answers.length;
 	const rest = shuffle(letters).slice(0, remaining);
 
-	return [...answers, ...rest];
+	return shuffle([...answers, ...rest]);
 }
 
 function replaceYoon(word: Letter[], yoons: Letter[]): Letter[] {
