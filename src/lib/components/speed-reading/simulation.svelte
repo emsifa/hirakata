@@ -16,11 +16,20 @@
 	let guesses: string[] = $state([]);
 	let index = $state(-1);
 
+	let answerResult: {
+		correct: boolean;
+		letters: {
+			userAnswer: string;
+			correctAnswer: string;
+		}[];
+	} | null = $state(null);
+
 	onMount(() => {
 		next();
 	});
 
 	function next() {
+		answerResult = null;
 		const notAll = !hiragana && !katakana;
 		word = generateRandomWord({
 			hiragana: notAll ? true : hiragana,
@@ -38,6 +47,16 @@
 			index += 1;
 		}
 
+		await sleep(50);
+
+		answerResult = {
+			correct: true,
+			letters: word.map((letter) => ({
+				userAnswer: letter.romaji,
+				correctAnswer: letter.romaji
+			}))
+		};
+
 		await sleep(500);
 	}
 </script>
@@ -48,14 +67,23 @@
 			class={cn(
 				'relative flex flex-col items-center justify-center text-5xl font-medium text-gray-400 transition-all',
 				{
-					'scale-125 text-gray-100': i === index,
-					'text-primary-400': i < index
+					'scale-125 text-gray-100': i === index && !answerResult,
+					'text-white': i < index && !answerResult,
+					'text-primary-400':
+						answerResult &&
+						answerResult?.letters[i]?.userAnswer === answerResult?.letters[i]?.correctAnswer
 				}
 			)}
 		>
 			<span>{letter.letter}</span>
 			{#if guesses[i]}
-				<span class="absolute top-[100%] text-base text-gray-400">{guesses[i]}</span>
+				<span
+					class={cn('absolute top-[100%] text-base text-gray-400', {
+						'text-primary-400':
+							answerResult &&
+							answerResult?.letters[i]?.userAnswer === answerResult?.letters[i]?.correctAnswer
+					})}>{guesses[i]}</span
+				>
 			{/if}
 		</div>
 	{/each}
