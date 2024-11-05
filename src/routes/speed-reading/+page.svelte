@@ -22,13 +22,13 @@
 	let options: Letter[] = $state([]);
 	let answers: string[] = $state([]);
 	let answerIndexes: number[] = $state([]); // to disable selected options
-
-	let blink: {
-		questionIndex: number;
-		optionIndex: number;
-		type: 'correct' | 'wrong';
+	let answerResult: {
+		correct: boolean;
+		letters: {
+			userAnswer: string;
+			correctAnswer: string;
+		}[];
 	} | null = $state(null);
-	let blinkTimeout: number | null = $state(null);
 
 	let breakTime: number = $state(0);
 	let breakInterval: number | null = $state(null);
@@ -39,8 +39,6 @@
 	let hearts = $derived(5 - (totalWrongs % 5));
 
 	let result: SpeedReadingGameResult | null = $state(null);
-
-	let wrongRate = $derived((totalWrongs / totalAttempts) * 100);
 
 	function start() {
 		reset();
@@ -78,6 +76,7 @@
 		});
 		options = generateOptions(8, question, enableHiragana, enableKatakana);
 		answers = [];
+		answerResult = null;
 		answerIndexes = [];
 		activeQuestionIndex = 0;
 	}
@@ -86,69 +85,81 @@
 		const opt = options[optionIndex];
 		if (!opt) return;
 
-		totalAttempts += 1;
-
-		const questionIndex = activeQuestionIndex;
-		const rightAnswer = question[activeQuestionIndex].romaji;
-		if (opt.romaji !== rightAnswer) {
-			handleWrong(questionIndex, optionIndex);
-		} else {
-			handleCorrect(questionIndex, optionIndex);
-		}
-	}
-
-	function handleWrong(questionIndex: number, optionIndex: number) {
-		playSoundWrong();
-		doBlink(questionIndex, optionIndex, 'wrong');
-
-		totalWrongs += 1;
-
-		if (totalWrongs % 5 === 0) {
-			takeABreak();
-		}
-	}
-
-	function handleCorrect(questionIndex: number, optionIndex: number) {
-		playSoundCorrect();
-		doBlink(questionIndex, optionIndex, 'correct');
-
-		answers.push(question[questionIndex].romaji);
+		answers.push(opt.romaji);
 		answerIndexes.push(optionIndex);
-		totalLetters += 1;
 
-		if (activeQuestionIndex < question.length - 1) {
-			activeQuestionIndex += 1;
-		} else {
-			activeQuestionIndex += 1;
-			totalWords += 1;
-			sleep(550).then(() => nextQuestion());
+		const hasNext = activeQuestionIndex < question.length - 1;
+		if (hasNext) {
+			activeQuestionIndex++;
+			return;
 		}
+
+		checkAnswer();
+	}
+
+	async function checkAnswer() {
+		let letters = question.map((letter, i) => {
+			const userAnswer = answers[i];
+			const correctAnswer = letter.romaji;
+			return { userAnswer, correctAnswer };
+		});
+
+		let wrongsCount = letters.filter((letter) => letter.userAnswer !== letter.correctAnswer).length;
+		let lettersCount = letters.length;
+
+		activeQuestionIndex = -1;
+		totalAttempts += 1;
+		totalLetters += lettersCount;
+
+		answerResult = {
+			correct: wrongsCount === 0,
+			letters
+		};
+
+		if (!answerResult.correct) {
+			handleWrong();
+		} else {
+			handleCorrect();
+		}
+	}
+
+	async function handleWrong() {
+		totalWrongs += 1;
+		playSoundWrong();
+
+		if (totalWrongs > 0 && totalWrongs % 5 === 0) {
+			await takeABreak();
+		}
+
+		await sleep(500);
+
+		answers = [];
+		answerIndexes = [];
+		activeQuestionIndex = 0;
+		answerResult = null;
+
+		return;
+	}
+
+	async function handleCorrect() {
+		totalWords += 1;
+		playSoundCorrect();
+
+		await sleep(500);
+		nextQuestion();
 	}
 
 	function takeABreak() {
-		breakTime = 5;
-		breakInterval = setInterval(() => {
-			breakTime -= 1;
-			if (breakTime <= 0) {
-				clearInterval(breakInterval!);
-			}
-		}, 1000);
-	}
-
-	function doBlink(questionIndex: number, optionIndex: number, type: 'correct' | 'wrong') {
-		blink = {
-			questionIndex,
-			optionIndex,
-			type
-		};
-
-		if (blinkTimeout) {
-			clearTimeout(blinkTimeout);
-		}
-
-		blinkTimeout = setTimeout(() => {
-			blink = null;
-		}, 500);
+		return new Promise((resolve) => {
+			breakTime = 3;
+			breakInterval = setInterval(() => {
+				breakTime -= 1;
+				if (breakTime <= 0) {
+					clearInterval(breakInterval!);
+					resolve(null);
+				}
+			}, 1000);
+		});
 	}
 
 	function finish() {
@@ -225,14 +236,6 @@
 											{result.totalWrongs}x
 										</span>
 									</div>
-									<div
-										class="flex justify-between border-b border-gray-700 p-3 text-lg text-gray-300"
-									>
-										<span>Rate Kesalahan</span>
-										<span>
-											{wrongRate.toFixed(2)}%
-										</span>
-									</div>
 								</div>
 								<div class="mt-4">
 									<button
@@ -276,10 +279,14 @@
 										'relative flex flex-col items-center justify-center text-4xl font-medium text-gray-500 transition-all md:text-5xl',
 										{
 											'scale-125 text-gray-100': i === activeQuestionIndex,
-											'text-primary-400': i < activeQuestionIndex,
-											'text-rose-400': blink && blink.questionIndex === i && blink.type === 'wrong',
+											'text-white': i < activeQuestionIndex,
+											'text-rose-400':
+												answerResult &&
+												answerResult.letters[i].userAnswer !==
+													answerResult.letters[i].correctAnswer,
 											'text-primary-500':
-												blink && blink.questionIndex === i && blink.type === 'correct'
+												answerResult &&
+												answerResult.letters[i].userAnswer === answerResult.letters[i].correctAnswer
 										}
 									)}
 								>
@@ -298,11 +305,7 @@
 									'rounded-xl bg-gray-600 px-4 py-3 text-lg font-medium text-white transition-all hover:bg-gray-500 hover:text-white',
 									{
 										'cursor-not-allowed bg-primary-500 hover:bg-primary-500':
-											answerIndexes.includes(i),
-										'bg-rose-500 text-white hover:bg-rose-600':
-											blink?.optionIndex === i && blink?.type === 'wrong',
-										'bg-primary-500 text-white hover:bg-primary-600':
-											blink?.optionIndex === i && blink?.type === 'correct'
+											answerIndexes.includes(i)
 									}
 								)}
 								disabled={answerIndexes.includes(i)}
