@@ -1,10 +1,77 @@
-type Point = [number, number];
-type PathData = Point[];
+import type { PathData, Question } from './types';
+import {
+	calculateSimilarity,
+	generateRandomizedQuestions,
+	getPathDimention,
+	getPathPoints
+} from './utils';
 
 export function createGame() {
 	let isDrawing = $state(false);
-	let playerPathData: PathData = $state([]);
+	let drawPathData: PathData = $state([]);
 	let similarity: number | null = $state(null);
+
+	let questions: Question[] = $state([]);
+	let questionIndex: number = $state(-1);
+	let questionPathIndex: number = $state(-1);
+	let answeredPaths: string[] = $state([]);
+	let similarities: number[] = $state([]);
+
+	const question = $derived(questions[questionIndex] ?? null);
+	const questionPath = $derived(question ? question.paths[questionPathIndex] : null);
+	const isLastQuestion = $derived(questionIndex === questions.length - 1);
+	const isLastPath = $derived(question ? questionPathIndex === question.paths.length - 1 : false);
+
+	function nextQuestion() {
+		if (isLastQuestion) {
+			setTimeout(() => {
+				start();
+			}, 1000);
+
+			return;
+		}
+
+		questionIndex++;
+		questionPathIndex = 0;
+	}
+
+	function nextPath() {
+		answeredPaths.push(questionPath!);
+
+		if (isLastPath) {
+			nextQuestion();
+			return;
+		}
+
+		questionPathIndex++;
+	}
+
+	function submitPath(questionPath: SVGPathElement, answerPath: SVGPathElement) {
+		const questionPoints = getPathPoints(questionPath, 30);
+		const playerPoints = getPathPoints(answerPath, 30);
+		const dim = getPathDimention(questionPath);
+
+		const sim = calculateSimilarity(questionPoints, playerPoints, dim);
+		clearPath();
+
+		if (sim > 70) {
+			similarities.push(sim);
+			nextPath();
+		}
+	}
+
+	function reset() {
+		questionIndex = -1;
+		questionPathIndex = -1;
+		answeredPaths = [];
+		similarities = [];
+	}
+
+	function start() {
+		questions = generateRandomizedQuestions();
+		reset();
+		nextQuestion();
+	}
 
 	function getCoords(event: MouseEvent | TouchEvent): [number, number] {
 		const svgRect = (event.currentTarget as SVGElement).getBoundingClientRect();
@@ -17,14 +84,14 @@ export function createGame() {
 
 	function startDrawing(event: MouseEvent | TouchEvent) {
 		event.preventDefault();
-		playerPathData = [getCoords(event)];
+		drawPathData = [getCoords(event)];
 		isDrawing = true;
 	}
 
 	function draw(event: MouseEvent | TouchEvent) {
 		if (!isDrawing) return;
 		event.preventDefault();
-		playerPathData = [...playerPathData, getCoords(event)];
+		drawPathData = [...drawPathData, getCoords(event)];
 	}
 
 	function stopDrawing() {
@@ -34,87 +101,45 @@ export function createGame() {
 	}
 
 	function clearPath() {
-		playerPathData = [];
+		drawPathData = [];
 		similarity = 0;
-	}
-
-	function euclideanDistance(p1: Point, p2: Point) {
-		return Math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2);
-	}
-
-	function frechetDistance(P: PathData, Q: PathData) {
-		const m = P.length;
-		const n = Q.length;
-		const dp = Array.from({ length: m }, () => Array(n).fill(-1));
-
-		function recursive(i: number, j: number) {
-			if (dp[i][j] !== -1) return dp[i][j];
-			const d = euclideanDistance(P[i], Q[j]);
-			if (i === 0 && j === 0) {
-				dp[i][j] = d;
-			} else if (i === 0) {
-				dp[i][j] = Math.max(d, recursive(i, j - 1));
-			} else if (j === 0) {
-				dp[i][j] = Math.max(d, recursive(i - 1, j));
-			} else {
-				dp[i][j] = Math.max(
-					d,
-					Math.min(recursive(i - 1, j), recursive(i, j - 1), recursive(i - 1, j - 1))
-				);
-			}
-			return dp[i][j];
-		}
-
-		return recursive(m - 1, n - 1);
-	}
-
-	function samplePathPoints(pathElement: SVGPathElement, numSamples: number): Point[] {
-		const length = pathElement.getTotalLength();
-		const sampledPoints: Point[] = [];
-		for (let i = 0; i <= numSamples; i++) {
-			const pos = pathElement.getPointAtLength((i / numSamples) * length);
-			sampledPoints.push([pos.x, pos.y]);
-		}
-		return sampledPoints;
-	}
-
-	function getPathDimention(pathElement: SVGPathElement): [number, number] {
-		const rect = pathElement.getBoundingClientRect();
-		return [rect.width, rect.height];
-	}
-
-	function calculateSimilarity(
-		numSamples = 30,
-		questionPath: SVGPathElement,
-		playerPath: SVGPathElement
-	) {
-		const questionPoints = samplePathPoints(questionPath, numSamples);
-		const playerPoints = samplePathPoints(playerPath, numSamples);
-
-		if (questionPoints.length === 0 || playerPoints.length === 0) {
-			similarity = null;
-			return;
-		}
-
-		const [width, height] = getPathDimention(questionPath);
-
-		const frechetDist = frechetDistance(questionPoints, playerPoints);
-		const maxDistance = Math.sqrt(width ** 2 + height ** 2); // Jarak maksimum dalam SVG
-		const sim = Math.max(0, 100 - (frechetDist / maxDistance) * 100);
-		similarity = sim;
 	}
 
 	return {
 		get similarity() {
 			return similarity;
 		},
-		get playerPathData() {
-			return playerPathData;
+		get drawPathData() {
+			return drawPathData;
 		},
+		get question() {
+			return question;
+		},
+		get questionIndex() {
+			return questionIndex;
+		},
+		get questionPathIndex() {
+			return questionPathIndex;
+		},
+		get questionPath() {
+			return questionPath;
+		},
+		get drawPathStr() {
+			return `M ${drawPathData.map((p) => p.join(' ')).join(' L ')}`;
+		},
+		get answeredPaths() {
+			// get question paths that have been answered
+			return answeredPaths;
+		},
+		get similarities() {
+			return similarities;
+		},
+		start,
+		nextPath,
+		submitPath,
 		clearPath,
 		startDrawing,
 		draw,
-		stopDrawing,
-		calculateSimilarity
+		stopDrawing
 	};
 }
