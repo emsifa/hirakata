@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils';
 	import { createGame } from './logic.svelte';
 
 	let svg: SVGElement | null = $state(null);
@@ -37,18 +38,24 @@
 </script>
 
 <main>
+	<h1>Writing</h1>
+	<p>
+		Letter: {game.question?.romaji}
+	</p>
 	<svg bind:this={svg} width="300" height="300">
 		<!-- Path Biru (Statis) -->
 		<path
 			bind:this={questionPath}
 			d={game.questionPath ?? ''}
-			class="stroke-gray-200"
+			class={cn('transition-all', {
+				'stroke-transparent': !game.showHint,
+				'stroke-gray-200': game.showHint
+			})}
 			fill="none"
 			stroke-width="12"
 			stroke-linecap="round"
 		/>
 
-		<!-- Group for answered paths -->
 		<g>
 			{#each game.answeredPaths as answeredPath}
 				<path
@@ -61,7 +68,6 @@
 			{/each}
 		</g>
 
-		<!-- Path Merah (Interaktif) -->
 		<path
 			bind:this={playerPath}
 			d={game.drawPathStr}
@@ -79,6 +85,7 @@
 	</ul>
 
 	<button onclick={game.start}>Start</button>
+	<button onclick={() => game.blinkHint()}>Show Hint</button>
 </main>
 
 <style>

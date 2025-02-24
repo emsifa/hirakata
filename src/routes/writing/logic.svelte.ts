@@ -10,6 +10,7 @@ export function createGame() {
 	let isDrawing = $state(false);
 	let drawPathData: PathData = $state([]);
 	let similarity: number | null = $state(null);
+	let showHint = $state(false);
 
 	let questions: Question[] = $state([]);
 	let questionIndex: number = $state(-1);
@@ -24,9 +25,7 @@ export function createGame() {
 
 	function nextQuestion() {
 		if (isLastQuestion) {
-			setTimeout(() => {
-				start();
-			}, 1000);
+			setTimeout(start, 1000);
 
 			return;
 		}
@@ -106,6 +105,13 @@ export function createGame() {
 		similarity = 0;
 	}
 
+	function blinkHint(duration = 1000) {
+		showHint = true;
+		setTimeout(() => {
+			showHint = false;
+		}, duration);
+	}
+
 	return {
 		get similarity() {
 			return similarity;
@@ -135,6 +141,10 @@ export function createGame() {
 		get similarities() {
 			return similarities;
 		},
+		get showHint() {
+			return showHint;
+		},
+		blinkHint,
 		start,
 		nextPath,
 		submitPath,
