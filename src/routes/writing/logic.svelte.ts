@@ -31,6 +31,7 @@ export function createGame() {
 			return;
 		}
 
+		answeredPaths = [];
 		questionIndex++;
 		questionPathIndex = 0;
 	}

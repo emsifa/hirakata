@@ -42,10 +42,9 @@
 		<path
 			bind:this={questionPath}
 			d={game.questionPath ?? ''}
-			class="stroke-gray-400"
+			class="stroke-gray-200"
 			fill="none"
-			stroke-width="2"
-			stroke-dasharray="5,5"
+			stroke-width="12"
 			stroke-linecap="round"
 		/>
 
@@ -56,7 +55,7 @@
 					d={answeredPath}
 					class="fill-none stroke-primary-500"
 					fill="none"
-					stroke-width="5"
+					stroke-width="12"
 					stroke-linecap="round"
 				/>
 			{/each}
@@ -68,7 +67,7 @@
 			d={game.drawPathStr}
 			class="stroke-secondary-500"
 			fill="none"
-			stroke-width="3"
+			stroke-width="12"
 			stroke-linecap="round"
 		/>
 	</svg>
