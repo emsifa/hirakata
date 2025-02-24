@@ -9,6 +9,7 @@
 	import Option from './option.svelte';
 	import SheetGameQuestion from './question.svelte';
 	import SheetGameResult from './result.svelte';
+	import { playSoundCorrect, playSoundWrong } from '$lib/sound';
 
 	let {
 		letters,
@@ -96,16 +97,6 @@
 
 		synth?.cancel();
 		synth?.speak(utterance);
-	}
-
-	function playSoundWrong() {
-		const audio = new Audio('/sounds/wrong.mp3');
-		audio.play();
-	}
-
-	function playSoundCorrect() {
-		const audio = new Audio('/sounds/correct.mp3');
-		audio.play();
 	}
 </script>
 

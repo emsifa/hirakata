@@ -6,11 +6,20 @@ import {
 	getPathPoints
 } from './utils';
 
-export function createGame() {
+export function createGame({
+	onQuestionDone,
+	onPathIncorrect,
+	onEnd
+}: {
+	onQuestionDone?: () => void;
+	onPathIncorrect?: () => void;
+	onEnd?: () => void;
+}) {
 	let isDrawing = $state(false);
 	let drawPathData: PathData = $state([]);
 	let similarity: number | null = $state(null);
 	let showHint = $state(false);
+	let started = $state(false);
 
 	let questions: Question[] = $state([]);
 	let questionIndex: number = $state(-1);
@@ -25,8 +34,7 @@ export function createGame() {
 
 	function nextQuestion() {
 		if (isLastQuestion) {
-			setTimeout(start, 1000);
-
+			setTimeout(end, 1000);
 			return;
 		}
 
@@ -39,6 +47,7 @@ export function createGame() {
 		answeredPaths.push(questionPath!);
 
 		if (isLastPath) {
+			onQuestionDone?.();
 			setTimeout(() => {
 				nextQuestion();
 			}, 1000);
@@ -56,10 +65,13 @@ export function createGame() {
 		const sim = calculateSimilarity(questionPoints, playerPoints, dim);
 		clearPath();
 
-		if (sim > 70) {
-			similarities.push(sim);
-			nextPath();
+		if (sim < 70) {
+			onPathIncorrect?.();
+			return;
 		}
+
+		similarities.push(sim);
+		nextPath();
 	}
 
 	function reset() {
@@ -69,8 +81,15 @@ export function createGame() {
 		similarities = [];
 	}
 
+	function end() {
+		started = false;
+		reset();
+		onEnd?.();
+	}
+
 	function start() {
 		questions = generateRandomizedQuestions();
+		started = true;
 		reset();
 		nextQuestion();
 	}
@@ -145,6 +164,9 @@ export function createGame() {
 		},
 		get showHint() {
 			return showHint;
+		},
+		get started() {
+			return started;
 		},
 		blinkHint,
 		start,

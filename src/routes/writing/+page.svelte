@@ -2,6 +2,7 @@
 	import Footer from '$lib/components/footer.svelte';
 	import PageTitle from '$lib/components/page-title.svelte';
 	import Button from '$lib/components/ui/button.svelte';
+	import { playSoundCorrect, playSoundWrong } from '$lib/sound';
 	import { cn } from '$lib/utils';
 	import { createGame } from './logic.svelte';
 
@@ -9,7 +10,11 @@
 	let questionPath: SVGPathElement | null = $state(null);
 	let playerPath: SVGPathElement | null = $state(null);
 
-	let game = createGame();
+	let game = createGame({
+		onQuestionDone() {
+			playSoundCorrect();
+		}
+	});
 
 	$effect(() => {
 		if (!svg) return;
@@ -102,8 +107,11 @@
 			</div>
 
 			<div class="mt-8 flex flex-1 flex-col gap-4 md:mt-0">
-				<Button className="w-full" onclick={game.start}>Start</Button>
-				<Button className="w-full" onclick={() => game.blinkHint()}>Show Hint</Button>
+				{#if !game.started}
+					<Button className="w-full" onclick={game.start}>Start</Button>
+				{:else}
+					<Button className="w-full" onclick={() => game.blinkHint()}>Show Hint</Button>
+				{/if}
 			</div>
 		</main>
 		<div class="mt-3 hidden md:block">
