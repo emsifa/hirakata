@@ -39,7 +39,9 @@ export function createGame() {
 		answeredPaths.push(questionPath!);
 
 		if (isLastPath) {
-			nextQuestion();
+			setTimeout(() => {
+				nextQuestion();
+			}, 1000);
 			return;
 		}
 

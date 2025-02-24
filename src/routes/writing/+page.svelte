@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Footer from '$lib/components/footer.svelte';
+	import PageTitle from '$lib/components/page-title.svelte';
+	import Button from '$lib/components/ui/button.svelte';
 	import { cn } from '$lib/utils';
 	import { createGame } from './logic.svelte';
 
@@ -37,61 +40,74 @@
 	});
 </script>
 
-<main>
-	<h1>Writing</h1>
-	<p>
-		Letter: {game.question?.romaji}
-	</p>
-	<svg bind:this={svg} width="300" height="300">
-		<!-- Path Biru (Statis) -->
-		<path
-			bind:this={questionPath}
-			d={game.questionPath ?? ''}
-			class={cn('transition-all', {
-				'stroke-transparent': !game.showHint,
-				'stroke-gray-200': game.showHint
-			})}
-			fill="none"
-			stroke-width="12"
-			stroke-linecap="round"
+<svelte:head>
+	<title>Latihan Menulis Hiragana/Katakana</title>
+	<meta
+		name="description"
+		content="Teman latihan menghafal huruf hiragana secara runut, di saat kamu gabut. Gratis, tanpa iklan, tanpa batasan."
+	/>
+	<link rel="icon" href="/hiragana.svg" sizes="any" type="image/svg+xml" />
+</svelte:head>
+
+<div
+	class="lex min-h-screen w-full items-center justify-center bg-gray-800 p-4 text-gray-700 sm:p-8"
+>
+	<div class="mx-auto w-full max-w-2xl">
+		<PageTitle
+			title="Latiha Menulis Hiragana/Katakana"
+			description="Teman latihan menghafal huruf hiragana secara runut, di saat kamu gabut."
 		/>
 
-		<g>
-			{#each game.answeredPaths as answeredPath}
-				<path
-					d={answeredPath}
-					class="fill-none stroke-primary-500"
-					fill="none"
-					stroke-width="12"
-					stroke-linecap="round"
-				/>
-			{/each}
-		</g>
+		<main class="flex flex-wrap rounded-xl bg-gray-700 p-3 md:p-8">
+			<div class="mr-6 flex flex-col items-center justify-center">
+				{#if game.question}
+					<p class="mb-3 text-lg font-semibold text-white">
+						Tuliskan huruf "<span class="text-amber-500">{game.question.romaji}</span>"
+					</p>
+				{/if}
+				<svg bind:this={svg} width="300" height="300" class="rounded-lg bg-gray-600 shadow-2xl">
+					<path
+						bind:this={questionPath}
+						d={game.questionPath ?? ''}
+						class={cn('transition-all', {
+							'stroke-transparent': !game.showHint,
+							'stroke-gray-200': game.showHint
+						})}
+						fill="none"
+						stroke-width="12"
+						stroke-linecap="round"
+					/>
 
-		<path
-			bind:this={playerPath}
-			d={game.drawPathStr}
-			class="stroke-secondary-500"
-			fill="none"
-			stroke-width="12"
-			stroke-linecap="round"
-		/>
-	</svg>
+					<g>
+						{#each game.answeredPaths as answeredPath}
+							<path
+								d={answeredPath}
+								class="fill-none stroke-primary-500"
+								fill="none"
+								stroke-width="12"
+								stroke-linecap="round"
+							/>
+						{/each}
+					</g>
 
-	<ul>
-		{#each game.similarities as sim}
-			<li>{sim}%</li>
-		{/each}
-	</ul>
+					<path
+						bind:this={playerPath}
+						d={game.drawPathStr}
+						class="stroke-secondary-500"
+						fill="none"
+						stroke-width="12"
+						stroke-linecap="round"
+					/>
+				</svg>
+			</div>
 
-	<button onclick={game.start}>Start</button>
-	<button onclick={() => game.blinkHint()}>Show Hint</button>
-</main>
-
-<style>
-	svg {
-		border: 1px solid black;
-		cursor: crosshair;
-		touch-action: none;
-	}
-</style>
+			<div class="mt-8 flex flex-1 flex-col gap-4 md:mt-0">
+				<Button className="w-full" onclick={game.start}>Start</Button>
+				<Button className="w-full" onclick={() => game.blinkHint()}>Show Hint</Button>
+			</div>
+		</main>
+		<div class="mt-3 hidden md:block">
+			<Footer />
+		</div>
+	</div>
+</div>
