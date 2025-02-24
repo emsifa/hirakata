@@ -70,13 +70,18 @@
 						Tuliskan huruf "<span class="text-amber-500">{game.question.romaji}</span>"
 					</p>
 				{/if}
-				<svg bind:this={svg} width="300" height="300" class="rounded-lg bg-gray-600 shadow-2xl">
+				<svg
+					bind:this={svg}
+					width="300"
+					height="300"
+					class="cursor-crosshair rounded-lg bg-gray-600 shadow-2xl"
+				>
 					<path
 						bind:this={questionPath}
 						d={game.questionPath ?? ''}
 						class={cn('transition-all', {
 							'stroke-transparent': !game.showHint,
-							'stroke-gray-200': game.showHint
+							'stroke-gray-500': game.showHint
 						})}
 						fill="none"
 						stroke-width="12"
@@ -98,7 +103,7 @@
 					<path
 						bind:this={playerPath}
 						d={game.drawPathStr}
-						class="stroke-secondary-500"
+						class="stroke-gray-200"
 						fill="none"
 						stroke-width="12"
 						stroke-linecap="round"
