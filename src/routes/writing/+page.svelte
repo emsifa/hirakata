@@ -59,12 +59,14 @@
 >
 	<div class="mx-auto w-full max-w-2xl">
 		<PageTitle
-			title="Latiha Menulis Hiragana/Katakana"
+			title="Latihan Menulis Hiragana/Katakana"
 			description="Teman latihan menghafal huruf hiragana secara runut, di saat kamu gabut."
 		/>
 
-		<main class="flex flex-wrap rounded-xl bg-gray-700 p-3 md:p-8">
-			<div class="mr-6 flex flex-col items-center justify-center">
+		<main
+			class="flex flex-col flex-wrap items-center rounded-xl bg-gray-700 p-3 md:flex-row md:items-start md:p-8"
+		>
+			<div class="flex flex-col items-center justify-center md:mr-6">
 				{#if game.question}
 					<p class="mb-3 text-lg font-semibold text-white">
 						Tuliskan huruf "<span class="text-amber-500">{game.question.romaji}</span>"
@@ -111,7 +113,7 @@
 				</svg>
 			</div>
 
-			<div class="mt-8 flex flex-1 flex-col gap-4 md:mt-0">
+			<div class="mt-8 flex w-full flex-1 flex-col gap-4 md:mt-0">
 				{#if !game.started}
 					<Button className="w-full" onclick={game.start}>Start</Button>
 				{:else}
