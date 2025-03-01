@@ -79,6 +79,7 @@ export function createGame({
 		questionPathIndex = -1;
 		answeredPaths = [];
 		similarities = [];
+		clearPath();
 	}
 
 	function end() {
